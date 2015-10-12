@@ -18,28 +18,39 @@ namespace FlooringApp.Data.OrderRepositories
 
             List<Order> orders = new List<Order>();
 
-            var reader = File.ReadAllLines(filePath);
-
-            for (int i = 1; i < reader.Length; i++)
+            try
             {
-                var columns = reader[i].Split(',');
+                var reader = File.ReadAllLines(filePath);
 
-                var order = new Order();
 
-                order.OrderNumber = int.Parse(columns[0]);
-                order.CustomerName = columns[1];
-                order.State = columns[2];
-                order.TaxRate = decimal.Parse(columns[3]);
-                order.ProductType = columns[4];
-                order.Area = decimal.Parse(columns[5]);
-                order.CostPerSquareFoot = decimal.Parse(columns[6]);
-                order.LaborCostPerSquareFoot = decimal.Parse(columns[7]);
-                order.MaterialCost = decimal.Parse(columns[8]);
-                order.LaborCost = decimal.Parse(columns[9]);
-                order.Tax = decimal.Parse(columns[10]);
-                order.Total = decimal.Parse(columns[11]);
+                for (int i = 1; i < reader.Length; i++)
+                {
+                    var columns = reader[i].Split(',');
 
-                orders.Add(order);
+                    var order = new Order();
+
+                    order.OrderNumber = int.Parse(columns[0]);
+                    order.CustomerName = columns[1];
+                    order.State = columns[2];
+                    order.TaxRate = decimal.Parse(columns[3]);
+                    order.ProductType = columns[4];
+                    order.Area = decimal.Parse(columns[5]);
+                    order.CostPerSquareFoot = decimal.Parse(columns[6]);
+                    order.LaborCostPerSquareFoot = decimal.Parse(columns[7]);
+                    order.MaterialCost = decimal.Parse(columns[8]);
+                    order.LaborCost = decimal.Parse(columns[9]);
+                    order.Tax = decimal.Parse(columns[10]);
+                    order.Total = decimal.Parse(columns[11]);
+
+                    orders.Add(order);
+                }
+
+            }
+
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("There are no orders on that date NIGGA!!!!");
+                Console.ReadLine();
             }
             return orders;
         }

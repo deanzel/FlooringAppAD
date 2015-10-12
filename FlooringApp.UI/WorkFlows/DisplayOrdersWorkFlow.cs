@@ -33,7 +33,7 @@ namespace FlooringApp.UI.WorkFlows
                     return orderDate;
                 }
 
-                Console.WriteLine("That was not a valid account number...");
+                Console.WriteLine("That was not a valid order date...");
                 Console.WriteLine("Press Enter to continue...");
                 Console.ReadLine();
 
@@ -63,7 +63,7 @@ namespace FlooringApp.UI.WorkFlows
         public void PrintOrdersFromDate(List<Order> OrdersList)
         {
             Console.Clear();
-            Console.WriteLine("Orders on the date {0}: ", _orderDate);
+            Console.WriteLine("Orders on the date {0:d}: ", _orderDate);
 
             foreach (var order in OrdersList)
             {
