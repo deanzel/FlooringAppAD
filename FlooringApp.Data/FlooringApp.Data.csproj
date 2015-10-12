@@ -41,12 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModOrderRepository.cs" />
-    <Compile Include="ProdOrderRepository.cs" />
+    <Compile Include="OrderRepositories\MockOrderRepository.cs" />
+    <Compile Include="OrderRepositories\OrderRepositoryFactory.cs" />
+    <Compile Include="OrderRepositories\ProdOrderRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <ProjectReference Include="..\FlooringApp.Models\FlooringApp.Models.csproj">
+      <Project>{67bbb9cf-460b-47d9-8d53-55510e25924d}</Project>
+      <Name>FlooringApp.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

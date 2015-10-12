@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace FlooringApp.Models
 {
-    public class Models
+    public interface IOrderRepository
     {
+        List<Order> GetOrdersFromDate(DateTime orderDate);
     }
 }
