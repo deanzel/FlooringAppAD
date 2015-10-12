@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlooringApp.UI
+namespace FlooringApp.BLL
 {
-    class Program
+    public class OrderOperations
     {
-        static void Main(string[] args)
-        {
-
-        }
     }
 }

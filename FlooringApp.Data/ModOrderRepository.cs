@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlooringApp.UI
+namespace FlooringApp.Data
 {
-    class Program
+    public class ModOrderRepository
     {
-        static void Main(string[] args)
-        {
-
-        }
     }
 }
