@@ -17,11 +17,12 @@ namespace FlooringApp.Data.OrderRepositories
             {
                 //Build initial set of order numbers
                 string filePath = @"DataFiles\Mock\";
-                string filePathHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
+                string filePathHistory = @"DataFiles\Mock\OrderNumbersHistory\OrderNumbersHistory.txt";
 
-                string[] orderNames = Directory.GetFiles(filePath, "Orders_");
+                //
+                string[] orderNames = Directory.GetFiles(filePath);
 
-                List<int> orderNumberHistory = new List<int>();
+                List<int> orderNumbersHistory = new List<int>();
 
                 foreach (var orderPath in orderNames)
                 {
@@ -30,13 +31,14 @@ namespace FlooringApp.Data.OrderRepositories
                     for (int i = 1; i < reader.Length; i++)
                     {
                         var columns = reader[i].Split(',');
-                        orderNumberHistory.Add(int.Parse(columns[0]));
+                        int x = int.Parse(columns[0]);
+                        orderNumbersHistory.Add(x);
                     }
                 }
 
                 using (var writer = File.CreateText(filePathHistory))
                 {
-                    foreach (int i in orderNumberHistory)
+                    foreach (int i in orderNumbersHistory)
                     {
                         writer.WriteLine(i);
                     }
@@ -92,7 +94,7 @@ namespace FlooringApp.Data.OrderRepositories
             filePath += NewOrder.NewOrderDate.ToString("MMddyyyy") + ".txt";
 
             //determine new order number
-            string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
+            string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory\OrderNumbersHistory.txt";
             var reader = File.ReadAllLines(filePathOrderHistory);
             int[] readerInts = Array.ConvertAll(reader, int.Parse);
            
@@ -120,6 +122,10 @@ namespace FlooringApp.Data.OrderRepositories
                         NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
                         NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
                 }
+            }
+            using (var writer = File.AppendText(filePathOrderHistory))
+            {
+                writer.WriteLine(NewOrder.OrderNumber);
             }
 
             return NewOrder;

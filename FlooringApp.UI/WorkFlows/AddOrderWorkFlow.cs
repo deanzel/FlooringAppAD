@@ -102,7 +102,7 @@ namespace FlooringApp.UI.WorkFlows
                 {
                     _orderInfo.State = response.StateTaxInfo.StateAbbreviation;
                     _orderInfo.TaxRate = response.StateTaxInfo.TaxRate;
-                    Console.WriteLine("You have chosen {0}. It has a tax rate of {1:p}.",
+                    Console.WriteLine("You have chosen {0}. It has a tax rate of {1}%.",
                         response.StateTaxInfo.StateName, _orderInfo.TaxRate);
                     Console.WriteLine("Press ENTER to continue.");
                     Console.ReadLine();
