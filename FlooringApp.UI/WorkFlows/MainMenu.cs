@@ -14,8 +14,9 @@ namespace FlooringApp.UI.WorkFlows
             do
             {
                 Console.Clear();
-                Console.WriteLine("WELCOME TO FLOORING ORDERS");
-                Console.WriteLine("-------------------------------------");
+                Console.WriteLine("WELCOME TO FLOORING ORDERS MANAGEMENT by Andrew & Dean");
+                Console.WriteLine("------------------------------------------------------");
+                Console.WriteLine();
                 Console.WriteLine("1. Display Orders");
                 Console.WriteLine("2. Add an Order");
                 Console.WriteLine("3. Edit an Order");

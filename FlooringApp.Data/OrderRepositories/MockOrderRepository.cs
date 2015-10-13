@@ -10,18 +10,16 @@ namespace FlooringApp.Data.OrderRepositories
 {
     public class MockOrderRepository : IOrderRepository
     {
-        public List<Order> GetOrdersFromDate(DateTime orderDate)
+        public List<Order> GetOrdersFromDate(DateTime OrderDate)
         {
             string filePath = @"DataFiles\Mock\Orders_";
-            filePath += orderDate.ToString("MMddyyyy");
-            filePath += ".txt.";
+            filePath += OrderDate.ToString("MMddyyyy") + ".txt";
 
             List<Order> orders = new List<Order>();
 
             try
             {
                 var reader = File.ReadAllLines(filePath);
-
 
                 for (int i = 1; i < reader.Length; i++)
                 {
@@ -49,10 +47,20 @@ namespace FlooringApp.Data.OrderRepositories
 
             catch (FileNotFoundException)
             {
-                Console.WriteLine("There are no orders on that date NIGGA!!!!");
+                Console.WriteLine("Bro, there are no orders on that date. Come on now...");
                 Console.ReadLine();
             }
             return orders;
+        }
+
+        public Order GetOrder(DateTime OrderDate, int OrderNumber)
+        {
+            string filePath = @"DataFiles\Mock\Orders_";
+            filePath += OrderDate.ToString("MMddyyyy") + ".txt";
+
+            List<Order> orders = new List<Order>();
+
+            return orders.FirstOrDefault(o => o.OrderNumber == OrderNumber);
         }
     }
 }

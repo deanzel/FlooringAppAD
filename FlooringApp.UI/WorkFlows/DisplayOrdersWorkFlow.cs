@@ -15,7 +15,7 @@ namespace FlooringApp.UI.WorkFlows
         public void Execute()
         {
             _orderDate = PromptOrderDateFromUser();
-            //pass into bll
+
             DisplayOrdersFromDate();
         }
 
@@ -63,7 +63,7 @@ namespace FlooringApp.UI.WorkFlows
         public void PrintOrdersFromDate(List<Order> OrdersList)
         {
             Console.Clear();
-            Console.WriteLine("Orders on the date {0:d}: ", _orderDate);
+            Console.WriteLine("Orders on the Date of {0:d}: ", _orderDate);
 
             foreach (var order in OrdersList)
             {

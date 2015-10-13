@@ -13,35 +13,53 @@ namespace FlooringApp.Data.OrderRepositories
         public List<Order> GetOrdersFromDate(DateTime orderDate)
         {
             string filePath = @"DataFiles\Prod\Orders_";
-            filePath += orderDate.ToString("MMddyyyy");
-            filePath += ".txt.";
+            filePath += orderDate.ToString("MMddyyyy") + ".txt";
 
             List<Order> orders = new List<Order>();
 
-            var reader = File.ReadAllLines(filePath);
-
-            for (int i = 1; i < reader.Length; i++)
+            try
             {
-                var columns = reader[i].Split(',');
+                var reader = File.ReadAllLines(filePath);
 
-                var order = new Order();
+                for (int i = 1; i < reader.Length; i++)
+                {
+                    var columns = reader[i].Split(',');
 
-                order.OrderNumber = int.Parse(columns[0]);
-                order.CustomerName = columns[1];
-                order.State = columns[2];
-                order.TaxRate = decimal.Parse(columns[3]);
-                order.ProductType = columns[4];
-                order.Area = decimal.Parse(columns[5]);
-                order.CostPerSquareFoot = decimal.Parse(columns[6]);
-                order.LaborCostPerSquareFoot = decimal.Parse(columns[7]);
-                order.MaterialCost = decimal.Parse(columns[8]);
-                order.LaborCost = decimal.Parse(columns[9]);
-                order.Tax = decimal.Parse(columns[10]);
-                order.Total = decimal.Parse(columns[11]);
+                    var order = new Order();
 
-                orders.Add(order);
+                    order.OrderNumber = int.Parse(columns[0]);
+                    order.CustomerName = columns[1];
+                    order.State = columns[2];
+                    order.TaxRate = decimal.Parse(columns[3]);
+                    order.ProductType = columns[4];
+                    order.Area = decimal.Parse(columns[5]);
+                    order.CostPerSquareFoot = decimal.Parse(columns[6]);
+                    order.LaborCostPerSquareFoot = decimal.Parse(columns[7]);
+                    order.MaterialCost = decimal.Parse(columns[8]);
+                    order.LaborCost = decimal.Parse(columns[9]);
+                    order.Tax = decimal.Parse(columns[10]);
+                    order.Total = decimal.Parse(columns[11]);
+
+                    orders.Add(order);
+                }
+            }
+
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Bro, there are no orders on that date. Come on now...");
+                Console.ReadLine();
             }
             return orders;
+        }
+
+        public Order GetOrder(DateTime OrderDate, int OrderNumber)
+        {
+            string filePath = @"DataFiles\Prod\Orders_";
+            filePath += OrderDate.ToString("MMddyyyy") + ".txt";
+
+            List<Order> orders = new List<Order>();
+
+            return orders.FirstOrDefault(o => o.OrderNumber == OrderNumber);
         }
     }
 }
