@@ -1,0 +1,5 @@
+ProductType,CostPerSquareFoot,LaborCostPerSquareFoot
+Wood,5.15,4.75
+Aluminum,3.15,9.99
+Water,0.01,100.00
+Vinyl,1.50,2.00

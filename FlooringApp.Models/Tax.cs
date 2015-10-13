@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace FlooringApp.Models
 {
-    public abstract class Tax
+    public class Tax
     {
-        private string StateAbbreviation;
-        private string StateName;
-        private decimal TaxRate;
-
-        private decimal TaxCalculator(decimal subtotal);
+        public string StateAbbreviation { get; set; }
+        public string StateName { get; set; }
+        public decimal TaxRate { get; set; }
     }
 }

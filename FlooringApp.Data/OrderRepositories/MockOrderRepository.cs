@@ -16,8 +16,7 @@ namespace FlooringApp.Data.OrderRepositories
             filePath += OrderDate.ToString("MMddyyyy") + ".txt";
 
             List<Order> orders = new List<Order>();
-
-            try
+            if (File.Exists(filePath))
             {
                 var reader = File.ReadAllLines(filePath);
 
@@ -42,13 +41,6 @@ namespace FlooringApp.Data.OrderRepositories
 
                     orders.Add(order);
                 }
-
-            }
-
-            catch (FileNotFoundException)
-            {
-                Console.WriteLine("Bro, there are no orders on that date. Come on now...");
-                Console.ReadLine();
             }
             return orders;
         }

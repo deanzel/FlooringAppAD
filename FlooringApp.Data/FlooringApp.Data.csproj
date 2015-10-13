@@ -44,6 +44,8 @@
     <Compile Include="OrderRepositories\MockOrderRepository.cs" />
     <Compile Include="OrderRepositories\OrderRepositoryFactory.cs" />
     <Compile Include="OrderRepositories\ProdOrderRepository.cs" />
+    <Compile Include="ProductsandTaxes\ProductsRepo.cs" />
+    <Compile Include="ProductsandTaxes\TaxRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,6 @@
+StateAbbreviataion,StateName,TaxRate
+TX,Texas,5.00
+OH,Ohio,10.00
+CA,California,25.00
+IL,Illinois,15.00
+NY,New York,50.00
