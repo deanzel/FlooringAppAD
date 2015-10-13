@@ -13,7 +13,7 @@ namespace FlooringApp.UI.WorkFlows
         private Order _orderInfo;
         private List<Product> _productsList;
         private bool _validOrderInfo;
-
+   
         public void Execute()
         {
             do
@@ -25,6 +25,11 @@ namespace FlooringApp.UI.WorkFlows
 
                 DisplayOrderSummary();
             } while (!_validOrderInfo);
+
+            //method that sends order downstairs
+
+            //print order summary with new order number after writing it to database
+
         }
 
         public void PromptNameFromUser()
@@ -253,6 +258,7 @@ namespace FlooringApp.UI.WorkFlows
 
             if (input == "Y")
             {
+                _orderInfo.NewOrderDate = DateTime.Now;
                 //Determine new order number
                 //Success for new order with information
                 _validOrderInfo = true;
@@ -262,6 +268,13 @@ namespace FlooringApp.UI.WorkFlows
                 Console.WriteLine("OK. We will now reenter all your new order information. Press ENTER to continue.");
                 Console.ReadLine();
             }
+        }
+
+        public Response SubmitOrder(Order OrderInfo)
+        {
+            var response = new Response();
+
+            return response;
         }
     }
 }

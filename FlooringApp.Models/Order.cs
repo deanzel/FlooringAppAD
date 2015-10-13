@@ -20,6 +20,7 @@ namespace FlooringApp.Models
         public decimal LaborCost { get; set; }
         public decimal Tax { get; set; }
         public decimal Total { get; set; }
+        public DateTime NewOrderDate { get; set; }
 
     }
 }
