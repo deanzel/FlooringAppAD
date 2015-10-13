@@ -54,10 +54,7 @@ namespace FlooringApp.Data.OrderRepositories
 
         public Order GetOrder(DateTime OrderDate, int OrderNumber)
         {
-            string filePath = @"DataFiles\Prod\Orders_";
-            filePath += OrderDate.ToString("MMddyyyy") + ".txt";
-
-            List<Order> orders = new List<Order>();
+            List<Order> orders = GetOrdersFromDate(OrderDate);
 
             return orders.FirstOrDefault(o => o.OrderNumber == OrderNumber);
         }
