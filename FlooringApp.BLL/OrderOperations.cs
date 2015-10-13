@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FlooringApp.Data.OrderRepositories;
+using FlooringApp.Data.ProductsandTaxes;
 using FlooringApp.Models;
 
 namespace FlooringApp.BLL
@@ -32,6 +33,27 @@ namespace FlooringApp.BLL
             {
                 response.Success = true;
                 response.OrdersList = orders;
+            }
+
+            return response;
+        }
+
+        public Response FetchStateTaxInfo(string stateAbbreviation)
+        {
+            var stateTaxRepo = new TaxRepo();
+            var response = new Response();
+
+            var stateTaxInfo = stateTaxRepo.GetStateTaxInfo(stateAbbreviation);
+
+            if (stateTaxInfo == null)
+            {
+                response.Success = false;
+                response.Message = "That state is not in our database.";
+            }
+            else
+            {
+                response.Success = true;
+                response.StateTaxInfo = stateTaxInfo;
             }
 
             return response;

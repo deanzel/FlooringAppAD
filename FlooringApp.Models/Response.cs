@@ -12,5 +12,6 @@ namespace FlooringApp.Models
         public string Message { get; set; }
         public Order Order { get; set; }
         public List<Order> OrdersList { get; set; }
+        public Tax StateTaxInfo { get; set; }
     }
 }
