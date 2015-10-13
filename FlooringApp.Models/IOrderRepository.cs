@@ -8,6 +8,8 @@ namespace FlooringApp.Models
 {
     public interface IOrderRepository
     {
-        List<Order> GetOrdersFromDate(DateTime orderDate);
+        List<Order> GetOrdersFromDate(DateTime OrderDate);
+
+        Order GetOrder(DateTime OrderDate, int OrderNumber);
     }
 }

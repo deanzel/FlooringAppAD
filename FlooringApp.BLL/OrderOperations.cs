@@ -23,7 +23,7 @@ namespace FlooringApp.BLL
 
             var response = new Response();
 
-            if (orders == null)
+            if (orders.Count() == 0 || orders == null)
             {
                 response.Success = false;
                 response.Message = "There are no orders on this date.";
