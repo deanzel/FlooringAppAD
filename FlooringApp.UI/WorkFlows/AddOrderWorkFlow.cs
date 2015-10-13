@@ -11,21 +11,20 @@ namespace FlooringApp.UI.WorkFlows
     public class AddOrderWorkFlow
     {
         private Order _orderInfo;
-        private List<Product> _productsList;  
+        private List<Product> _productsList;
+        private bool _validOrderInfo;
 
         public void Execute()
         {
-            
-            //prompt for order info
-        }
-        
-        
-        //bool validArea = false;
+            do
+            {
+                PromptNameFromUser();
+                PromptStateFromUser();
+                PromptProductTypeFromUser();
+                PromptAreaFromUser();
 
-        public void PromptOrderInfoFromUser()
-        {
-            PromptNameFromUser();
-            PromptStateFromUser();
+                DisplayOrderSummary();
+            } while (!_validOrderInfo);
         }
 
         public void PromptNameFromUser()
@@ -174,6 +173,95 @@ namespace FlooringApp.UI.WorkFlows
 
             } while (!validProductType);
 
+        }
+
+        public void PromptAreaFromUser()
+        {
+            bool validArea = false;
+            bool validInt = false;
+            string areaInputString = "";
+            int areaInputInt;
+
+            do
+            {
+                Console.Clear();
+                do
+                {
+                    Console.Write("How many sqft of {0} would you like to purchase? ", _orderInfo.ProductType);
+                    areaInputString = Console.ReadLine();
+                    if (int.TryParse(areaInputString, out areaInputInt))
+                    {
+                        validInt = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("That is not an integer. Press ENTER to continue.");
+                        Console.ReadLine();
+                        Console.Clear();
+                    }
+                } while (!validInt);
+                Console.WriteLine("Are you sure you want to purchase {0} sqft of {1}? (Y)es or (N)o", areaInputInt,
+                    _orderInfo.ProductType);
+                string input = Console.ReadLine().ToUpper();
+                if (input == "Y")
+                {
+                    _orderInfo.Area = areaInputInt;
+                    _orderInfo.MaterialCost = _orderInfo.Area*_orderInfo.CostPerSquareFoot;
+                    _orderInfo.LaborCost = _orderInfo.Area*_orderInfo.LaborCostPerSquareFoot;
+                    decimal subtotal = (_orderInfo.MaterialCost + _orderInfo.LaborCost);
+                    _orderInfo.Tax = subtotal*(_orderInfo.TaxRate/100);
+                    _orderInfo.Total = subtotal + _orderInfo.Tax;
+
+                    validArea = true;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter your new desired area. Press ENTER to continue.");
+                    Console.ReadLine();
+                }
+            } while (!validArea);
+        }
+
+        public void DisplayOrderSummary()
+        {
+
+            Console.Clear();
+            Console.WriteLine("Order Summary:");
+            Console.WriteLine();
+            Console.WriteLine("Customer Name: {0}", _orderInfo.CustomerName);
+            Console.WriteLine("State: {0}", _orderInfo.State);
+            Console.WriteLine("Product Type: {0}", _orderInfo.ProductType);
+            Console.WriteLine("Area : {0} sqft", _orderInfo.Area);
+            Console.WriteLine("Materials Cost: {0:c}", _orderInfo.MaterialCost);
+            Console.WriteLine("Labor Cost: {0:c}", _orderInfo.LaborCost);
+            Console.WriteLine("Subtotal: {0:c}", _orderInfo.Total - _orderInfo.Tax);
+            Console.WriteLine("Tax: {0:c}", _orderInfo.Tax);
+            Console.WriteLine("TOTAL COST: {0:c}", _orderInfo.Total);
+            Console.WriteLine();
+
+            string input = "";
+            do
+            {
+                Console.WriteLine("Is this order info accurate? (Y)es or (N)o.");
+                input = Console.ReadLine().ToUpper();
+                if (input != "Y" || input != "N")
+                {
+                    Console.WriteLine("Invalid input. Press ENTER to continue.");
+                    Console.ReadLine();
+                }
+            } while (input != "Y" || input != "N");
+
+            if (input == "Y")
+            {
+                //Determine new order number
+                //Success for new order with information
+                _validOrderInfo = true;
+            }
+            else
+            {
+                Console.WriteLine("OK. We will now reenter all your new order information. Press ENTER to continue.");
+                Console.ReadLine();
+            }
         }
     }
 }
