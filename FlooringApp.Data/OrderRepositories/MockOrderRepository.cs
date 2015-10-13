@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,39 @@ namespace FlooringApp.Data.OrderRepositories
 {
     public class MockOrderRepository : IOrderRepository
     {
+        public MockOrderRepository(string initialBuild)
+        {
+            if (initialBuild.ToUpper() == "Y")
+            {
+                //Build initial set of order numbers
+                string filePath = @"DataFiles\Mock\";
+                string filePathHistory = @"DataFiles\Mock\OrderNumberHistory.txt";
+
+                string[] orderNames = Directory.GetFiles(filePath, "Orders_");
+
+                List<int> orderNumberHistory = new List<int>();
+
+                foreach (var orderPath in orderNames)
+                {
+                    var reader = File.ReadAllLines(orderPath);
+
+                    for (int i = 1; i < reader.Length; i++)
+                    {
+                        var columns = reader[i].Split(',');
+                        orderNumberHistory.Add(int.Parse(columns[0]));
+                    }
+                }
+
+                using (var writer = File.CreateText(filePathHistory))
+                {
+                    foreach (int i in orderNumberHistory)
+                    {
+                        writer.WriteLine(i);
+                    }
+                }
+            }
+        }
+
         public List<Order> GetOrdersFromDate(DateTime OrderDate)
         {
             string filePath = @"DataFiles\Mock\Orders_";

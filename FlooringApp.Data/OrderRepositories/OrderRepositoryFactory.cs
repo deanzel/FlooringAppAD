@@ -12,12 +12,14 @@ namespace FlooringApp.Data.OrderRepositories
     {
         public static IOrderRepository CreateOrderRepository()
         {
+            string initialBuild = ConfigurationManager.AppSettings["initialBuild"];
+
             switch (ConfigurationManager.AppSettings["mode"])
             {
                 case "prod":
                     return new ProdOrderRepository();
                 default: //"mock"
-                    return new MockOrderRepository();
+                    return new MockOrderRepository(initialBuild);
             }
         }
 
