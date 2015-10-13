@@ -58,5 +58,32 @@ namespace FlooringApp.BLL
 
             return response;
         }
+
+        public List<Product> FetchProductsList()
+        {
+            var productsRepo = new ProductsRepo();
+            return productsRepo.GetProductsList();
+        }
+
+        public Response FetchProductInfo(string ProductType)
+        {
+            var response = new Response();
+            var productsRepo = new ProductsRepo();
+
+            var product = productsRepo.GetProductInfo(ProductType);
+
+            if (product == null)
+            {
+                response.Success = false;
+                response.Message = "That product is not in our database.";
+            }
+            else
+            {
+                response.Success = true;
+                response.ProductInfo = product;
+            }
+
+            return response;
+        }
     }
 }

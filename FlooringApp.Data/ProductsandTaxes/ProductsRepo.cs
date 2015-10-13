@@ -24,7 +24,7 @@ namespace FlooringApp.Data.ProductsandTaxes
 
                 var product = new Product();
 
-                product.ProductType = columns[0];
+                product.ProductType = columns[0].ToUpper();
                 product.CostPerSquareFoot = decimal.Parse(columns[1]);
                 product.LaborCostPerSquareFoot = decimal.Parse(columns[2]);
 
@@ -38,7 +38,7 @@ namespace FlooringApp.Data.ProductsandTaxes
         {
             var productsList = GetProductsList();
 
-            var product = productsList.FirstOrDefault(p => p.ProductType == ProductType);
+            var product = productsList.FirstOrDefault(p => p.ProductType == ProductType.ToUpper());
 
             return product;
         }
