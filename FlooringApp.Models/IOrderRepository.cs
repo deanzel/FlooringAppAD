@@ -11,5 +11,7 @@ namespace FlooringApp.Models
         List<Order> GetOrdersFromDate(DateTime OrderDate);
 
         Order GetOrder(DateTime OrderDate, int OrderNumber);
+
+        Order WriteNewOrderToRepo(Order NewOrder);
     }
 }

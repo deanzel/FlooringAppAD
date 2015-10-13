@@ -85,5 +85,10 @@ namespace FlooringApp.BLL
 
             return response;
         }
+
+        public Order SubmitOrderToRepo(Order NewOrder)
+        {
+            return _orderRepo.WriteNewOrderToRepo(NewOrder);
+        }
     }
 }

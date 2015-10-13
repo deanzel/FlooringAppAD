@@ -13,7 +13,12 @@ namespace FlooringApp.UI.WorkFlows
         private Order _orderInfo;
         private List<Product> _productsList;
         private bool _validOrderInfo;
-   
+
+        public AddOrderWorkFlow()
+        {
+            _orderInfo = new Order();
+            _productsList = new List<Product>();
+        }
         public void Execute()
         {
             do
@@ -27,7 +32,11 @@ namespace FlooringApp.UI.WorkFlows
             } while (!_validOrderInfo);
 
             //method that sends order downstairs
+            var oops = new OrderOperations();
+            oops.SubmitOrderToRepo(_orderInfo);
 
+            Console.WriteLine(_orderInfo.OrderNumber);
+            Console.ReadLine();
             //print order summary with new order number after writing it to database
 
         }
@@ -46,11 +55,11 @@ namespace FlooringApp.UI.WorkFlows
                 {
                     Console.Write("Is {0} the correct Name? (Y)es or (N)o:", customerName);
                     input = Console.ReadLine().ToUpper();
-                    if (input != "Y" || input != "N")
+                    if (input != "Y" && input != "N")
                     {
                         Console.WriteLine("That is not a valid input.");
                     }
-                } while (input != "Y" || input != "N");
+                } while (input != "Y" && input != "N");
                 if (input == "Y")
                 {
                     validName = true;
@@ -140,11 +149,11 @@ namespace FlooringApp.UI.WorkFlows
                 {
                     Console.Write("Is {0} the correct product that you want to order? (Y)es or (N)o:", productInput);
                     input = Console.ReadLine().ToUpper();
-                    if (input != "Y" || input != "N")
+                    if (input != "Y" && input != "N")
                     {
                         Console.WriteLine("That is not a valid input.");
                     }
-                } while (input != "Y" || input != "N");
+                } while (input != "Y" && input != "N");
 
                 if (input == "Y")
                 {
@@ -249,12 +258,12 @@ namespace FlooringApp.UI.WorkFlows
             {
                 Console.WriteLine("Is this order info accurate? (Y)es or (N)o.");
                 input = Console.ReadLine().ToUpper();
-                if (input != "Y" || input != "N")
+                if (input != "Y" && input != "N")
                 {
                     Console.WriteLine("Invalid input. Press ENTER to continue.");
                     Console.ReadLine();
                 }
-            } while (input != "Y" || input != "N");
+            } while (input != "Y" && input != "N");
 
             if (input == "Y")
             {

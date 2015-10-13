@@ -17,7 +17,7 @@ namespace FlooringApp.Data.OrderRepositories
             {
                 //Build initial set of order numbers
                 string filePath = @"DataFiles\Mock\";
-                string filePathHistory = @"DataFiles\Mock\OrderNumberHistory.txt";
+                string filePathHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
 
                 string[] orderNames = Directory.GetFiles(filePath, "Orders_");
 
@@ -84,6 +84,45 @@ namespace FlooringApp.Data.OrderRepositories
             List<Order> orders = GetOrdersFromDate(OrderDate);
 
             return orders.FirstOrDefault(o => o.OrderNumber == OrderNumber);
+        }
+
+        public Order WriteNewOrderToRepo(Order NewOrder)
+        {
+            string filePath = @"DataFiles\Mock\Orders_";
+            filePath += NewOrder.NewOrderDate.ToString("MMddyyyy") + ".txt";
+
+            //determine new order number
+            string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
+            var reader = File.ReadAllLines(filePathOrderHistory);
+            int[] readerInts = Array.ConvertAll(reader, int.Parse);
+           
+            NewOrder.OrderNumber = readerInts.Max() + 1;
+
+            if (File.Exists(filePath))
+            {
+                using (var writer = File.AppendText(filePath))
+                {
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
+                        NewOrder.CustomerName,
+                        NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
+                        NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
+                        NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
+                }
+            }
+            else
+            {
+                using (var writer = File.CreateText(filePath))
+                {
+                    writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
+                        NewOrder.CustomerName,
+                        NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
+                        NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
+                        NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
+                }
+            }
+
+            return NewOrder;
         }
     }
 }
