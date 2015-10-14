@@ -203,7 +203,15 @@ namespace FlooringApp.UI.WorkFlows
                     areaInputString = Console.ReadLine();
                     if (int.TryParse(areaInputString, out areaInputInt))
                     {
-                        validInt = true;
+                        if (areaInputInt > 0)
+                        {
+                            validInt = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("You must enter a value greater than 0!! Press ENTER to continue.");
+                            Console.ReadLine();
+                        }
                     }
                     else
                     {
@@ -277,12 +285,12 @@ namespace FlooringApp.UI.WorkFlows
             }
         }
 
-        public Response SubmitOrder(Order OrderInfo)
-        {
-            var response = new Response();
+        //public Response SubmitOrder(Order OrderInfo)
+        //{
+        //    var response = new Response();
 
-            return response;
-        }
+        //    return response;
+        //}
 
         public void DisplayOrderSubmitSuccess()
         {

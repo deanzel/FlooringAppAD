@@ -15,5 +15,7 @@ namespace FlooringApp.Models
         Order WriteNewOrderToRepo(Order NewOrder);
 
         Response RemoveOrderFromRepo(Order OrderToRemove);
+
+        Response EditOrderToRepo(Order OrderWithEdits);
     }
 }

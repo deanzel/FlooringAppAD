@@ -158,7 +158,42 @@ namespace FlooringApp.Data.OrderRepositories
 
             var response = new Response();
             response.Success = true;
-            response.Message = "The order was successfully removed :-)";
+            response.Message = "The order was successfully removed!!";
+
+            return response;
+        }
+
+        public Response EditOrderToRepo(Order OrderWithEdits)
+        {
+            string filePath = @"DataFiles\Mock\Orders_";
+            filePath += OrderWithEdits.OrderDate.ToString("MMddyyyy") + ".txt";
+
+            var ordersList = GetOrdersFromDate(OrderWithEdits.OrderDate);
+
+            var ordersListMod = ordersList.Where(o => o.OrderNumber != OrderWithEdits.OrderNumber);
+            
+
+            using (var writer = File.CreateText(filePath))
+            {
+                writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+
+                foreach (var order in ordersListMod)
+                {
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
+                        order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
+                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
+                }
+
+                writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderWithEdits.OrderNumber,
+                        OrderWithEdits.CustomerName, OrderWithEdits.State, OrderWithEdits.TaxRate, OrderWithEdits.ProductType, OrderWithEdits.Area,
+                        OrderWithEdits.CostPerSquareFoot, OrderWithEdits.LaborCostPerSquareFoot, OrderWithEdits.MaterialCost,
+                        OrderWithEdits.LaborCost, OrderWithEdits.Tax, OrderWithEdits.Total);
+
+            }
+
+            var response = new Response();
+            response.Success = true;
+            response.Message = "The order was successfully edited!!";
 
             return response;
         }

@@ -116,5 +116,12 @@ namespace FlooringApp.BLL
             var response = _orderRepo.RemoveOrderFromRepo(OrderToRemove);
             return response;
         }
+
+        public Response SubmitEditOrderToRepo(Order OrderWithEdits)
+        {
+            var response = _orderRepo.EditOrderToRepo(OrderWithEdits);
+
+            return response;
+        }
     }
 }

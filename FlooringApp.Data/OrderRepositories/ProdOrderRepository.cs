@@ -158,6 +158,36 @@ namespace FlooringApp.Data.OrderRepositories
 
             return response;
         }
+
+        public Response EditOrderToRepo(Order OrderWithEdits)
+        {
+            string filePath = @"DateFiles\Mock\Orders_";
+            filePath += OrderWithEdits.OrderDate.ToString("MMddyyyy") + ".txt";
+
+            var ordersList = GetOrdersFromDate(OrderWithEdits.OrderDate);
+
+            var orderToEdit = ordersList.First(o => o.OrderNumber == OrderWithEdits.OrderNumber);
+
+            orderToEdit = OrderWithEdits;
+
+            using (var writer = File.CreateText(filePath))
+            {
+                writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+
+                foreach (var order in ordersList)
+                {
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
+                        order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
+                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
+                }
+            }
+
+            var response = new Response();
+            response.Success = true;
+            response.Message = "The order was successfully edited!!";
+
+            return response;
+        }
     }
 }
 
