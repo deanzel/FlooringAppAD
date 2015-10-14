@@ -17,10 +17,10 @@ namespace FlooringApp.Data.OrderRepositories
             {
                 //Build initial set of order numbers
                 string filePath = @"DataFiles\Mock\";
-                string filePathHistory = @"DataFiles\Mock\OrderNumbersHistory\OrderNumbersHistory.txt";
+                string filePathHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
 
                 //
-                string[] orderNames = Directory.GetFiles(filePath);
+                string[] orderNames = Directory.GetFiles(filePath, "Orders_*.txt");
 
                 List<int> orderNumbersHistory = new List<int>();
 
@@ -94,7 +94,7 @@ namespace FlooringApp.Data.OrderRepositories
             filePath += NewOrder.NewOrderDate.ToString("MMddyyyy") + ".txt";
 
             //determine new order number
-            string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory\OrderNumbersHistory.txt";
+            string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
             var reader = File.ReadAllLines(filePathOrderHistory);
             int[] readerInts = Array.ConvertAll(reader, int.Parse);
            
