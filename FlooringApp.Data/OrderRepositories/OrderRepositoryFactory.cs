@@ -17,7 +17,7 @@ namespace FlooringApp.Data.OrderRepositories
             switch (ConfigurationManager.AppSettings["mode"])
             {
                 case "prod":
-                    return new ProdOrderRepository();
+                    return new ProdOrderRepository(initialBuild);
                 default: //"mock"
                     return new MockOrderRepository(initialBuild);
             }

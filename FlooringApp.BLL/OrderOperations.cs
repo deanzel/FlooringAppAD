@@ -90,5 +90,31 @@ namespace FlooringApp.BLL
         {
             return _orderRepo.WriteNewOrderToRepo(NewOrder);
         }
+
+        public Response GetOrderInfo(Order OrderInfo)
+        {
+            var response = new Response();
+            var order = _orderRepo.GetOrder(OrderInfo);
+
+            if (order == null)
+            {
+                response.Success = false;
+                response.Message = "That order is not in our database.";
+            }
+            else
+            {
+                response.Success = true;
+                response.Order = order;
+            }
+
+            return response;
+        }
+
+        public Response SubmitRemoveOrderToRepo(Order OrderToRemove)
+        {
+            //submit to data layer to remove
+            var response = _orderRepo.RemoveOrderFromRepo(OrderToRemove);
+            return response;
+        }
     }
 }

@@ -10,14 +10,46 @@ namespace FlooringApp.Data.OrderRepositories
 {
     public class ProdOrderRepository : IOrderRepository
     {
+        public ProdOrderRepository(string initialBuild)
+        {
+            if (initialBuild.ToUpper() == "Y")
+            {
+                //Build initial set of order numbers
+                string filePath = @"DataFiles\Prod\";
+                string filePathHistory = @"DataFiles\Prod\OrderNumbersHistory.txt";
+
+                string[] orderNames = Directory.GetFiles(filePath, "Orders_*.txt");
+
+                List<int> orderNumbersHistory = new List<int>();
+
+                foreach (var orderPath in orderNames)
+                {
+                    var reader = File.ReadAllLines(orderPath);
+
+                    for (int i = 1; i < reader.Length; i++)
+                    {
+                        var columns = reader[i].Split(',');
+                        orderNumbersHistory.Add(int.Parse(columns[0]));
+                    }
+                }
+
+                using (var writer = File.CreateText(filePathHistory))
+                {
+                    foreach (int i in orderNumbersHistory)
+                    {
+                        writer.WriteLine(i);
+                    }
+                }
+            }
+        }
+
         public List<Order> GetOrdersFromDate(DateTime orderDate)
         {
             string filePath = @"DataFiles\Prod\Orders_";
             filePath += orderDate.ToString("MMddyyyy") + ".txt";
 
             List<Order> orders = new List<Order>();
-
-            try
+            if (File.Exists(filePath))
             {
                 var reader = File.ReadAllLines(filePath);
 
@@ -43,29 +75,24 @@ namespace FlooringApp.Data.OrderRepositories
                     orders.Add(order);
                 }
             }
-
-            catch (FileNotFoundException)
-            {
-                Console.WriteLine("Bro, there are no orders on that date. Come on now...");
-                Console.ReadLine();
-            }
             return orders;
+
         }
 
-        public Order GetOrder(DateTime OrderDate, int OrderNumber)
+        public Order GetOrder(Order OrderInfo)
         {
-            List<Order> orders = GetOrdersFromDate(OrderDate);
+            List<Order> orders = GetOrdersFromDate(OrderInfo.OrderDate);
 
-            return orders.FirstOrDefault(o => o.OrderNumber == OrderNumber);
+            return orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
         }
 
         public Order WriteNewOrderToRepo(Order NewOrder)
         {
-            string filePath = @"DataFiles\Mock\Orders_";
-            filePath += NewOrder.NewOrderDate.ToString("MMddyyyy") + ".txt";
+            string filePath = @"DataFiles\Prod\Orders_";
+            filePath += NewOrder.OrderDate.ToString("MMddyyyy") + ".txt";
 
             //determine new order number
-            string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
+            string filePathOrderHistory = @"DataFiles\Prod\OrderNumbersHistory.txt";
             var reader = File.ReadAllLines(filePathOrderHistory);
             int[] readerInts = Array.ConvertAll(reader, int.Parse);
 
@@ -86,7 +113,8 @@ namespace FlooringApp.Data.OrderRepositories
             {
                 using (var writer = File.CreateText(filePath))
                 {
-                    writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                    writer.WriteLine(
+                        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
                     writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
                         NewOrder.CustomerName,
                         NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
@@ -94,8 +122,41 @@ namespace FlooringApp.Data.OrderRepositories
                         NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
                 }
             }
+            using (var writer = File.AppendText(filePathOrderHistory))
+            {
+                writer.WriteLine(NewOrder.OrderNumber);
+            }
 
             return NewOrder;
+        }
+
+        public Response RemoveOrderFromRepo(Order OrderToRemove)
+        {
+            string filePath = @"DataFiles\Prod\Order_";
+            filePath += OrderToRemove.OrderDate.ToString("MMddyyyy") + ".txt";
+
+            var ordersList = GetOrdersFromDate(OrderToRemove.OrderDate);
+
+            var newOrdersList = ordersList.Where(o => o.OrderNumber != OrderToRemove.OrderNumber);
+
+            using (var writer = File.CreateText(filePath))
+            {
+                writer.WriteLine(
+                        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+
+                foreach (var order in newOrdersList)
+                {
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
+                        order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
+                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
+                }
+            }
+
+            var response = new Response();
+            response.Success = true;
+            response.Message = "The order was successfully removed :-)";
+
+            return response;
         }
     }
 }

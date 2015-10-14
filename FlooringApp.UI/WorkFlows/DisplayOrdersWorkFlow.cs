@@ -71,7 +71,7 @@ namespace FlooringApp.UI.WorkFlows
                 Console.WriteLine("Order Number: {0}", order.OrderNumber);
                 Console.WriteLine("Customer Name: {0}", order.CustomerName);
                 Console.WriteLine("State: {0}", order.State);
-                Console.WriteLine("Tax Rate: {0:P}", order.TaxRate);
+                Console.WriteLine("Tax Rate: {0}%", order.TaxRate);
                 Console.WriteLine("Product Type: {0}", order.ProductType);
                 Console.WriteLine("Area: {0}", order.Area);
                 Console.WriteLine("Cost Per Square Foot: {0:C}", order.CostPerSquareFoot);

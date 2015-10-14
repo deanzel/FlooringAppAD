@@ -30,8 +30,7 @@ namespace FlooringApp.Data.OrderRepositories
                     for (int i = 1; i < reader.Length; i++)
                     {
                         var columns = reader[i].Split(',');
-                        int x = int.Parse(columns[0]);
-                        orderNumbersHistory.Add(x);
+                        orderNumbersHistory.Add(int.Parse(columns[0]));
                     }
                 }
 
@@ -80,17 +79,19 @@ namespace FlooringApp.Data.OrderRepositories
             return orders;
         }
 
-        public Order GetOrder(DateTime OrderDate, int OrderNumber)
+        public Order GetOrder(Order OrderInfo)
         {
-            List<Order> orders = GetOrdersFromDate(OrderDate);
+            List<Order> orders = GetOrdersFromDate(OrderInfo.OrderDate);
 
-            return orders.FirstOrDefault(o => o.OrderNumber == OrderNumber);
+            OrderInfo = orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
+
+            return OrderInfo;
         }
 
         public Order WriteNewOrderToRepo(Order NewOrder)
         {
             string filePath = @"DataFiles\Mock\Orders_";
-            filePath += NewOrder.NewOrderDate.ToString("MMddyyyy") + ".txt";
+            filePath += NewOrder.OrderDate.ToString("MMddyyyy") + ".txt";
 
             //determine new order number
             string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
@@ -128,6 +129,35 @@ namespace FlooringApp.Data.OrderRepositories
             }
 
             return NewOrder;
+        }
+
+        public Response RemoveOrderFromRepo(Order OrderToRemove)
+        {
+            string filePath = @"DataFiles\Mock\Orders_";
+            filePath += OrderToRemove.OrderDate.ToString("MMddyyyy") + ".txt";
+
+            var ordersList = GetOrdersFromDate(OrderToRemove.OrderDate);
+
+            var newOrdersList = ordersList.Where(o => o.OrderNumber != OrderToRemove.OrderNumber);
+
+            using (var writer = File.CreateText(filePath))
+            {
+                writer.WriteLine(
+                        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+
+                foreach (var order in newOrdersList)
+                {
+                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
+                        order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area, 
+                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
+                }
+            }
+
+            var response = new Response();
+            response.Success = true;
+            response.Message = "The order was successfully removed :-)";
+
+            return response;
         }
     }
 }

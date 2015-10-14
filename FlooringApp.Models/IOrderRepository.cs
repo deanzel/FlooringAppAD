@@ -10,8 +10,10 @@ namespace FlooringApp.Models
     {
         List<Order> GetOrdersFromDate(DateTime OrderDate);
 
-        Order GetOrder(DateTime OrderDate, int OrderNumber);
+        Order GetOrder(Order OrderInfo);
 
         Order WriteNewOrderToRepo(Order NewOrder);
+
+        Response RemoveOrderFromRepo(Order OrderToRemove);
     }
 }

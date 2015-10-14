@@ -265,7 +265,7 @@ namespace FlooringApp.UI.WorkFlows
 
             if (input == "Y")
             {
-                _orderInfo.NewOrderDate = DateTime.Now;
+                _orderInfo.OrderDate = DateTime.Now;
                 //Determine new order number
                 //Success for new order with information
                 _validOrderInfo = true;
@@ -288,10 +288,10 @@ namespace FlooringApp.UI.WorkFlows
         {
             Console.Clear();
             Console.WriteLine("{0}, you have successfully submited your new order #{1} to our database on {2:d}. Here is your order information below:",
-                _orderInfo.CustomerName, _orderInfo.OrderNumber, _orderInfo.NewOrderDate);
+                _orderInfo.CustomerName, _orderInfo.OrderNumber, _orderInfo.OrderDate);
             Console.WriteLine();
             Console.WriteLine("Order Number: {0}", _orderInfo.OrderNumber);
-            Console.WriteLine("Order Date: {0:d}", _orderInfo.NewOrderDate);
+            Console.WriteLine("Order Date: {0:d}", _orderInfo.OrderDate);
             Console.WriteLine("Customer Name: {0}", _orderInfo.CustomerName);
             Console.WriteLine("State: {0}", _orderInfo.State);
             Console.WriteLine("Product Type: {0}", _orderInfo.ProductType);
