@@ -22,7 +22,6 @@ namespace FlooringApp.UI.WorkFlows
             PromptForOrderDate();
             PromptForOrderNumber();
             FetchOrderInfoToRemove();
-            PromptUserToConfirmRemoval();
             
         }
 
@@ -143,10 +142,11 @@ namespace FlooringApp.UI.WorkFlows
                 _orderToRemove.Tax = response.Order.Tax;
                 _orderToRemove.Total = response.Order.Total;
 
-                DisplayOrderInfoToRemove(response.Order);
+                DisplayOrderInfoToRemove();
                 
                 Console.WriteLine();
                 //prompt user if they want to remove
+                PromptUserToConfirmRemoval();
             }
             else
             {
@@ -157,7 +157,7 @@ namespace FlooringApp.UI.WorkFlows
             }
         }
 
-        public void DisplayOrderInfoToRemove(Order FetchedOrderInfo)
+        public void DisplayOrderInfoToRemove()
         {
             Console.WriteLine();
             Console.WriteLine("Order Number: {0}", _orderToRemove.OrderNumber);

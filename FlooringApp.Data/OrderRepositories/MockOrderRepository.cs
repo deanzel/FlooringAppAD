@@ -83,7 +83,10 @@ namespace FlooringApp.Data.OrderRepositories
         {
             List<Order> orders = GetOrdersFromDate(OrderInfo.OrderDate);
 
-            OrderInfo = orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
+            Order updatedOrderInfo = new Order(); 
+            updatedOrderInfo = orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
+
+            OrderInfo = updatedOrderInfo;
 
             return OrderInfo;
         }
