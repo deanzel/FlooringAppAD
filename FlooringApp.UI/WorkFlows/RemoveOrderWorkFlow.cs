@@ -23,9 +23,7 @@ namespace FlooringApp.UI.WorkFlows
             PromptForOrderNumber();
             FetchOrderInfoToRemove();
             PromptUserToConfirmRemoval();
-
-
-            //retrieve order information from repo
+            
         }
 
         public void PromptForOrderDate()
@@ -133,8 +131,6 @@ namespace FlooringApp.UI.WorkFlows
             if (response.Success)
             {
                 Console.WriteLine("This is the information for the order you want to remove.");
-               
-                DisplayOrderInfoToRemove(response.Order);
                 _orderToRemove.CustomerName = response.Order.CustomerName;
                 _orderToRemove.State = response.Order.State;
                 _orderToRemove.TaxRate = response.Order.TaxRate;
@@ -147,6 +143,8 @@ namespace FlooringApp.UI.WorkFlows
                 _orderToRemove.Tax = response.Order.Tax;
                 _orderToRemove.Total = response.Order.Total;
 
+                DisplayOrderInfoToRemove(response.Order);
+                
                 Console.WriteLine();
                 //prompt user if they want to remove
             }
