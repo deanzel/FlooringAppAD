@@ -35,8 +35,8 @@ namespace FlooringApp.UI.WorkFlows
             var oops = new OrderOperations();
             oops.SubmitOrderToRepo(_orderInfo);
 
-            Console.WriteLine(_orderInfo.OrderNumber);
-            Console.ReadLine();
+            DisplayOrderSubmitSuccess();
+
             //print order summary with new order number after writing it to database
 
         }
@@ -53,7 +53,7 @@ namespace FlooringApp.UI.WorkFlows
             {
                 do
                 {
-                    Console.Write("Is {0} the correct Name? (Y)es or (N)o:", customerName);
+                    Console.Write("Is {0} the correct Name? (Y)es or (N)o: ", customerName);
                     input = Console.ReadLine().ToUpper();
                     if (input != "Y" && input != "N")
                     {
@@ -139,15 +139,13 @@ namespace FlooringApp.UI.WorkFlows
                     Console.WriteLine("-Labor cost/sqft: {0:c}", product.LaborCostPerSquareFoot);
                     Console.WriteLine();
                 }
-                Console.WriteLine("Press ENTER to continue.");
-                Console.ReadLine();
 
                 Console.Write("Enter the product type of what you want to order: ");
                 productInput = Console.ReadLine();
                 string input = "";
                 do
                 {
-                    Console.Write("Is {0} the correct product that you want to order? (Y)es or (N)o:", productInput);
+                    Console.Write("Is {0} the correct product that you want to order? (Y)es or (N)o: ", productInput);
                     input = Console.ReadLine().ToUpper();
                     if (input != "Y" && input != "N")
                     {
@@ -165,7 +163,7 @@ namespace FlooringApp.UI.WorkFlows
                         _orderInfo.CostPerSquareFoot = response.ProductInfo.CostPerSquareFoot;
                         _orderInfo.LaborCostPerSquareFoot = response.ProductInfo.LaborCostPerSquareFoot;
                         Console.WriteLine(
-                            "You have selected {0} with a cost/sqft of {1:c} and a labor cost/sqft of {2:c}",
+                            "You have selected {0} with a cost/sqft of {1:c} and a labor cost/sqft of {2:c}.",
                             _orderInfo.ProductType, _orderInfo.CostPerSquareFoot,
                             _orderInfo.LaborCostPerSquareFoot);
                         Console.WriteLine("Press ENTER to continue.");
@@ -214,7 +212,7 @@ namespace FlooringApp.UI.WorkFlows
                         Console.Clear();
                     }
                 } while (!validInt);
-                Console.WriteLine("Are you sure you want to purchase {0} sqft of {1}? (Y)es or (N)o", areaInputInt,
+                Console.Write("Are you sure you want to purchase {0} sqft of {1}? (Y)es or (N)o: ", areaInputInt,
                     _orderInfo.ProductType);
                 string input = Console.ReadLine().ToUpper();
                 if (input == "Y")
@@ -256,7 +254,7 @@ namespace FlooringApp.UI.WorkFlows
             string input = "";
             do
             {
-                Console.WriteLine("Is this order info accurate? (Y)es or (N)o.");
+                Console.Write("Is this order info accurate? (Y)es or (N)o: ");
                 input = Console.ReadLine().ToUpper();
                 if (input != "Y" && input != "N")
                 {
@@ -284,6 +282,28 @@ namespace FlooringApp.UI.WorkFlows
             var response = new Response();
 
             return response;
+        }
+
+        public void DisplayOrderSubmitSuccess()
+        {
+            Console.Clear();
+            Console.WriteLine("{0}, you have successfully submited your new order #{1} to our database on {2:d}. Here is your order information below:",
+                _orderInfo.CustomerName, _orderInfo.OrderNumber, _orderInfo.NewOrderDate);
+            Console.WriteLine();
+            Console.WriteLine("Order Number: {0}", _orderInfo.OrderNumber);
+            Console.WriteLine("Order Date: {0:d}", _orderInfo.NewOrderDate);
+            Console.WriteLine("Customer Name: {0}", _orderInfo.CustomerName);
+            Console.WriteLine("State: {0}", _orderInfo.State);
+            Console.WriteLine("Product Type: {0}", _orderInfo.ProductType);
+            Console.WriteLine("Area : {0} sqft", _orderInfo.Area);
+            Console.WriteLine("Materials Cost: {0:c}", _orderInfo.MaterialCost);
+            Console.WriteLine("Labor Cost: {0:c}", _orderInfo.LaborCost);
+            Console.WriteLine("Subtotal: {0:c}", _orderInfo.Total - _orderInfo.Tax);
+            Console.WriteLine("Tax: {0:c}", _orderInfo.Tax);
+            Console.WriteLine("TOTAL COST: {0:c}", _orderInfo.Total);
+            Console.WriteLine();
+            Console.WriteLine("Press ENTER to return to the Main Menu.");
+            Console.ReadLine();
         }
     }
 }
