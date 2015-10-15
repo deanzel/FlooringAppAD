@@ -142,13 +142,14 @@ namespace FlooringApp.Data.OrderRepositories
             using (var writer = File.CreateText(filePath))
             {
                 writer.WriteLine(
-                        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                    "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
                 foreach (var order in newOrdersList)
                 {
                     writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
                         order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
-                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
+                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost,
+                        order.Tax, order.Total);
                 }
             }
 
@@ -161,28 +162,39 @@ namespace FlooringApp.Data.OrderRepositories
 
         public Response EditOrderToRepo(Order OrderWithEdits)
         {
-            string filePath = @"DateFiles\Mock\Orders_";
+            string filePath = @"DateFiles\Prod\Orders_";
             filePath += OrderWithEdits.OrderDate.ToString("MMddyyyy") + ".txt";
 
             var ordersList = GetOrdersFromDate(OrderWithEdits.OrderDate);
+            //find index of order to edit in ordersList
+            int index = ordersList.IndexOf(OrderWithEdits);
+            //use index number to make direct reference type modification
+            var response = new Response();
 
-            var orderToEdit = ordersList.First(o => o.OrderNumber == OrderWithEdits.OrderNumber);
+            if (index == -1)
+            {
 
-            orderToEdit = OrderWithEdits;
+                response.Success = false;
+                response.Message = "Failed to find order in system. Internal glitch. Report to admin";
+                return response;
+            }
+
+            ordersList[index] = OrderWithEdits;
 
             using (var writer = File.CreateText(filePath))
             {
-                writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                writer.WriteLine(
+                    "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
                 foreach (var order in ordersList)
                 {
                     writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
                         order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
-                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
+                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost,
+                        order.Tax, order.Total);
                 }
             }
 
-            var response = new Response();
             response.Success = true;
             response.Message = "The order was successfully edited!!";
 
@@ -190,4 +202,3 @@ namespace FlooringApp.Data.OrderRepositories
         }
     }
 }
-

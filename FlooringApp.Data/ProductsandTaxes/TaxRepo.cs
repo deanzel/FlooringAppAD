@@ -37,8 +37,8 @@ namespace FlooringApp.Data.ProductsandTaxes
         public Tax GetStateTaxInfo(string StateAbbreviation)
         {
             var taxesList = GetTaxesList();
-
-            var stateTax = taxesList.FirstOrDefault(s => s.StateAbbreviation == StateAbbreviation);
+            //fixed lower-case state abbreviation input error
+            var stateTax = taxesList.FirstOrDefault(s => s.StateAbbreviation.ToUpper() == StateAbbreviation.ToUpper());
 
             return stateTax;
         }

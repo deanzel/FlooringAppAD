@@ -55,11 +55,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataFiles\Orders_06012013.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\FlooringApp.BLL\FlooringApp.BLL.csproj">
       <Project>{886d5ae2-0361-4ead-b70e-e8bc8a0f6a5d}</Project>
       <Name>FlooringApp.BLL</Name>
@@ -68,6 +63,9 @@
       <Project>{67bbb9cf-460b-47d9-8d53-55510e25924d}</Project>
       <Name>FlooringApp.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataFiles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

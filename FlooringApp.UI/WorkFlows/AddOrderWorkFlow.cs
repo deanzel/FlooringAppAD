@@ -140,9 +140,21 @@ namespace FlooringApp.UI.WorkFlows
                     Console.WriteLine();
                 }
 
-                Console.Write("Enter the product type of what you want to order: ");
-                productInput = Console.ReadLine();
-                string input = "";
+                //fixed empty product entry glitch
+                do
+                {
+                    Console.Write("Enter the product type of what you want to order: ");
+                    productInput = Console.ReadLine();
+
+                    if (productInput == "")
+                    {
+                        Console.WriteLine("You must enter something. Press ENTER to conintue.");
+                        Console.ReadLine();
+                    }
+                } while (productInput == "");
+
+                string input;
+
                 do
                 {
                     Console.Write("Is {0} the correct product that you want to order? (Y)es or (N)o: ", productInput);

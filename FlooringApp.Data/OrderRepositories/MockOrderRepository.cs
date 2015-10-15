@@ -83,7 +83,7 @@ namespace FlooringApp.Data.OrderRepositories
         {
             List<Order> orders = GetOrdersFromDate(OrderInfo.OrderDate);
 
-            Order updatedOrderInfo = new Order(); 
+            Order updatedOrderInfo = new Order();
             updatedOrderInfo = orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
 
             OrderInfo = updatedOrderInfo;
@@ -100,7 +100,7 @@ namespace FlooringApp.Data.OrderRepositories
             string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
             var reader = File.ReadAllLines(filePathOrderHistory);
             int[] readerInts = Array.ConvertAll(reader, int.Parse);
-           
+
             NewOrder.OrderNumber = readerInts.Max() + 1;
 
             if (File.Exists(filePath))
@@ -118,7 +118,8 @@ namespace FlooringApp.Data.OrderRepositories
             {
                 using (var writer = File.CreateText(filePath))
                 {
-                    writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                    writer.WriteLine(
+                        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
                     writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
                         NewOrder.CustomerName,
                         NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
@@ -146,13 +147,14 @@ namespace FlooringApp.Data.OrderRepositories
             using (var writer = File.CreateText(filePath))
             {
                 writer.WriteLine(
-                        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                    "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
                 foreach (var order in newOrdersList)
                 {
                     writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
-                        order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area, 
-                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost, order.Tax, order.Total);
+                        order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
+                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost,
+                        order.Tax, order.Total);
                 }
             }
 
@@ -170,15 +172,26 @@ namespace FlooringApp.Data.OrderRepositories
 
             var ordersList = GetOrdersFromDate(OrderWithEdits.OrderDate);
 
-            var order = ordersList.First(o => o.OrderNumber == OrderWithEdits.OrderNumber);
+            //find index of order to edit in ordersList
+            int index = ordersList.IndexOf(OrderWithEdits);
+                //returns index. Index is -1 (negative 1) if cannot find match
 
-            order = OrderWithEdits;
-            
-            File.Delete(filePath);
+            var response = new Response();
+            if (index == -1)
+            {
+
+                response.Success = false;
+                response.Message = "Failed to find order in system. Internal glitch. Report to admin";
+                return response;
+            }
+
+            //use index number to make direct reference type modification
+            ordersList[index] = OrderWithEdits;
 
             using (var writer = File.CreateText(filePath))
             {
-                writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+                writer.WriteLine(
+                    "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
                 foreach (var o in ordersList)
                 {
@@ -186,19 +199,14 @@ namespace FlooringApp.Data.OrderRepositories
                         o.CustomerName, o.State, o.TaxRate, o.ProductType, o.Area,
                         o.CostPerSquareFoot, o.LaborCostPerSquareFoot, o.MaterialCost, o.LaborCost, o.Tax, o.Total);
                 }
-
-                //writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderWithEdits.OrderNumber,
-                //        OrderWithEdits.CustomerName, OrderWithEdits.State, OrderWithEdits.TaxRate, OrderWithEdits.ProductType, OrderWithEdits.Area,
-                //        OrderWithEdits.CostPerSquareFoot, OrderWithEdits.LaborCostPerSquareFoot, OrderWithEdits.MaterialCost,
-                //        OrderWithEdits.LaborCost, OrderWithEdits.Tax, OrderWithEdits.Total);
-
             }
 
-            var response = new Response();
             response.Success = true;
             response.Message = "The order was successfully edited!!";
 
             return response;
+
+
         }
     }
 }

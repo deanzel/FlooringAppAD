@@ -38,7 +38,7 @@ namespace FlooringApp.Data.ProductsandTaxes
         {
             var productsList = GetProductsList();
 
-            var product = productsList.FirstOrDefault(p => p.ProductType == ProductType.ToUpper());
+            var product = productsList.FirstOrDefault(p => p.ProductType.ToUpper() == ProductType.ToUpper());
 
             return product;
         }
