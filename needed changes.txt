@@ -1,0 +1,11 @@
+take out error occurred in display orders on date without orders
+
+delete texas example
+
+only prompt them for product type confirmation if porudcct is valid
+
+change to decimal parse on add order
+
+add exception for name with comma
+
+fix the reference thing in the add/remove order
