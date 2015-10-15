@@ -55,7 +55,7 @@ namespace FlooringApp.Data.OrderRepositories
             }
 
             _currentTime = DateTime.Now;
-            string filePathErrorLog = @"DataFiles\Mock\ErrorLogs\ErrorLog_" + _currentTime.ToString("MMddyyyyhhmm") +
+            string filePathErrorLog = @"DataFiles\Mock\ErrorLogs\ErrorLog_" + _currentTime.ToString("MMddyyyyhhmmss") +
                                       ".txt";
 
             _errorLogPath = filePathErrorLog;

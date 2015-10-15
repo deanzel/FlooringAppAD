@@ -38,6 +38,13 @@ namespace FlooringApp.BLL
             return response;
         }
 
+        public List<Tax> FetchListOfStates()
+        {
+            var stateTaxRepo = new TaxRepo();
+
+            return stateTaxRepo.GetTaxesList();
+        }
+
         public Response FetchStateTaxInfo(string stateAbbreviation)
         {
             var stateTaxRepo = new TaxRepo();

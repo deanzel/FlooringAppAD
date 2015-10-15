@@ -72,6 +72,7 @@ namespace FlooringApp.UI.WorkFlows
                 }
                 else
                 {
+                    Console.Clear();
                     Console.Write("OK. Please enter your new desired Name: ");
                     customerName = Console.ReadLine();
                 }
@@ -85,12 +86,21 @@ namespace FlooringApp.UI.WorkFlows
         {
             bool validState = false;
             string stateInput = "";
+            var listOfStates = _oops.FetchListOfStates();
 
             do
             {
                 do
                 {
                     Console.Clear();
+                    //Show list of States and their tax rates
+                    Console.WriteLine("List of States and their tax rates:\n");
+                    foreach (var s in listOfStates)
+                    {
+                        Console.WriteLine("{0} ({1}) - {2}%", s.StateAbbreviation, s.StateName, s.TaxRate);
+                    }
+
+                    Console.WriteLine();
                     Console.Write("Enter the state abbreviation of where you're making this order (ex. OH for Ohio): ");
                     stateInput = Console.ReadLine();
                     if (stateInput.Length != 2)
@@ -177,53 +187,75 @@ namespace FlooringApp.UI.WorkFlows
 
                 string input;
 
-                do
-                {
-                    Console.Write("Is {0} the correct product that you want to order? (Y)es or (N)o: ", productInput);
-                    input = Console.ReadLine().ToUpper();
-                    if (input != "Y" && input != "N")
-                    {
-                        Console.WriteLine("That is not a valid input.");
-                    }
-                } while (input != "Y" && input != "N");
+                //Quick check to see if product type is in list before confirming it to the system
+                var pString = new Product {ProductType = productInput};
+                
 
-                if (input == "Y")
+                if (_productsList.Contains(pString))
                 {
-                    var response = _oops.FetchProductInfo(productInput);
-
-                    if (response.Success)
+                    do
                     {
-                        _orderInfo.ProductType = response.ProductInfo.ProductType;
-                        _orderInfo.CostPerSquareFoot = response.ProductInfo.CostPerSquareFoot;
-                        _orderInfo.LaborCostPerSquareFoot = response.ProductInfo.LaborCostPerSquareFoot;
-                        Console.WriteLine(
-                            "You have selected {0} with a cost/sqft of {1:c} and a labor cost/sqft of {2:c}.",
-                            _orderInfo.ProductType, _orderInfo.CostPerSquareFoot,
-                            _orderInfo.LaborCostPerSquareFoot);
-                        Console.WriteLine("Press ENTER to continue.");
-                        Console.ReadLine();
-                        validProductType = true;
+                        Console.Write("Is {0} the correct product that you want to order? (Y)es or (N)o: ", productInput);
+                        input = Console.ReadLine().ToUpper();
+                        if (input != "Y" && input != "N")
+                        {
+                            Console.WriteLine("That is not a valid input.");
+                        }
+                    } while (input != "Y" && input != "N");
+
+
+                    if (input == "Y")
+                    {
+                        var response = _oops.FetchProductInfo(productInput);
+
+                        if (response.Success)
+                        {
+                            _orderInfo.ProductType = response.ProductInfo.ProductType;
+                            _orderInfo.CostPerSquareFoot = response.ProductInfo.CostPerSquareFoot;
+                            _orderInfo.LaborCostPerSquareFoot = response.ProductInfo.LaborCostPerSquareFoot;
+                            Console.Clear();
+                            Console.WriteLine(
+                                "You have selected {0} with a cost/sqft of {1:c} and a labor cost/sqft of {2:c}.",
+                                _orderInfo.ProductType, _orderInfo.CostPerSquareFoot,
+                                _orderInfo.LaborCostPerSquareFoot);
+                            Console.WriteLine("Press ENTER to continue.");
+                            Console.ReadLine();
+                            validProductType = true;
+                        }
+                        else
+                        {
+                            _errorResponse.ErrorTime = DateTime.Now;
+                            _errorResponse.ErrorSourceMethod = "Add Order Method";
+                            _errorResponse.Message = "Product type is not in the database.";
+                            _errorResponse.Input = productInput;
+                            _oops.SubmitErrorToLog(_errorResponse);
+
+                            Console.Clear();
+                            Console.WriteLine("Error occurred!!");
+                            Console.WriteLine(response.Message);
+                            Console.ReadLine();
+                        }
                     }
                     else
                     {
-                        _errorResponse.ErrorTime = DateTime.Now;
-                        _errorResponse.ErrorSourceMethod = "Add Order Method";
-                        _errorResponse.Message = "Product type is not in the database.";
-                        _errorResponse.Input = productInput;
-                        _oops.SubmitErrorToLog(_errorResponse);
-
-                        Console.WriteLine("Error occurred!!");
-                        Console.WriteLine(response.Message);
+                        Console.Write("OK. We will display the products list again. Press ENTER to continue.");
                         Console.ReadLine();
                     }
                 }
                 else
                 {
-                    Console.Write("OK. We will display the products list again. Press ENTER to continue.");
+                    _errorResponse.ErrorTime = DateTime.Now;
+                    _errorResponse.ErrorSourceMethod = "Add Order Method";
+                    _errorResponse.Message = "Product type is not in the database.";
+                    _errorResponse.Input = productInput;
+                    _oops.SubmitErrorToLog(_errorResponse);
+
+                    Console.WriteLine("That product is not in the database. Press ENTER to continue.");
                     Console.ReadLine();
                 }
 
             } while (!validProductType);
+
 
         }
 
@@ -272,25 +304,35 @@ namespace FlooringApp.UI.WorkFlows
                         Console.Clear();
                     }
                 } while (!validDec);
-                Console.Write("Are you sure you want to purchase {0} sqft of {1}? (Y)es or (N)o: ", areaInputDecimal,
-                    _orderInfo.ProductType);
-                string input = Console.ReadLine().ToUpper();
-                if (input == "Y")
+                string input;
+                do
                 {
-                    _orderInfo.Area = areaInputDecimal;
-                    _orderInfo.MaterialCost = _orderInfo.Area*_orderInfo.CostPerSquareFoot;
-                    _orderInfo.LaborCost = _orderInfo.Area*_orderInfo.LaborCostPerSquareFoot;
-                    decimal subtotal = (_orderInfo.MaterialCost + _orderInfo.LaborCost);
-                    _orderInfo.Tax = subtotal*(_orderInfo.TaxRate/100);
-                    _orderInfo.Total = subtotal + _orderInfo.Tax;
+                    Console.Write("Are you sure you want to purchase {0} sqft of {1}? (Y)es or (N)o: ", areaInputDecimal,
+                        _orderInfo.ProductType);
+                    input = Console.ReadLine().ToUpper();
+                    if (input == "Y")
+                    {
+                        _orderInfo.Area = areaInputDecimal;
+                        _orderInfo.MaterialCost = _orderInfo.Area*_orderInfo.CostPerSquareFoot;
+                        _orderInfo.LaborCost = _orderInfo.Area*_orderInfo.LaborCostPerSquareFoot;
+                        decimal subtotal = (_orderInfo.MaterialCost + _orderInfo.LaborCost);
+                        _orderInfo.Tax = subtotal*(_orderInfo.TaxRate/100);
+                        _orderInfo.Total = subtotal + _orderInfo.Tax;
 
-                    validArea = true;
-                }
-                else
-                {
-                    Console.WriteLine("Please enter your new desired area. Press ENTER to continue.");
-                    Console.ReadLine();
-                }
+                        validArea = true;
+                    }
+                    else if (input == "N")
+                    {
+                        Console.WriteLine("Please enter your new desired area. Press ENTER to continue.");
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("That is not a valid input. Press ENTER to continue.");
+                        Console.ReadLine();
+                    }
+                } while (input != "Y" && input != "N");
+
             } while (!validArea);
         }
 
