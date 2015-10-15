@@ -12,10 +12,12 @@ namespace FlooringApp.UI.WorkFlows
     {
         private DateTime _orderDate;
         public OrderOperations _oops;
+        private ErrorResponse _errorResponse;
 
         public DisplayOrdersWorkFlow(OrderOperations oops)
         {
             _oops = oops;
+            _errorResponse = new ErrorResponse();
         }
         public void Execute()
         {
@@ -37,7 +39,11 @@ namespace FlooringApp.UI.WorkFlows
                 {
                     return orderDate;
                 }
-
+                _errorResponse.ErrorTime = DateTime.Now;
+                _errorResponse.ErrorSourceMethod = "Display Order Method";
+                _errorResponse.Message = "Invalid date time";
+                _errorResponse.Input = input;
+                _oops.SubmitErrorToLog(_errorResponse);
                 Console.WriteLine("That was not a valid order date...");
                 Console.WriteLine("Press Enter to continue...");
                 Console.ReadLine();

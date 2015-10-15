@@ -19,12 +19,15 @@ namespace FlooringApp.UI.WorkFlows
 
         public OrderOperations _oops;
 
+        private ErrorResponse _errorResponse;
+
         public EditOrderWorkFlow(OrderOperations oops)
         {
             _orderToEdit = new Order();
             _orderPreEdit = new Order();
             exitToMainMenu = false;
             _oops = oops;
+            _errorResponse = new ErrorResponse();
         }
 
         public void Execute()
@@ -89,6 +92,11 @@ namespace FlooringApp.UI.WorkFlows
                 //failing DateTime TryParse
                 else
                 {
+                    _errorResponse.ErrorTime = DateTime.Now;
+                    _errorResponse.ErrorSourceMethod = "Edit Order Method";
+                    _errorResponse.Message = "Invalid date time";
+                    _errorResponse.Input = dateInput;
+                    _oops.SubmitErrorToLog(_errorResponse);
                     Console.WriteLine("\nThat is not a valid date. Press ENTER to continue.");
                     Console.ReadLine();
                 }
@@ -137,6 +145,11 @@ namespace FlooringApp.UI.WorkFlows
 
                 else
                 {
+                    _errorResponse.ErrorTime = DateTime.Now;
+                    _errorResponse.ErrorSourceMethod = "Edit Order Method";
+                    _errorResponse.Message = "Invalid order number";
+                    _errorResponse.Input = orderNumberInput;
+                    _oops.SubmitErrorToLog(_errorResponse);
                     Console.WriteLine("\nThat is not a valid order number. Press ENTER to continue.");
                     Console.ReadLine();
                 }
@@ -296,6 +309,11 @@ namespace FlooringApp.UI.WorkFlows
                     }
                     else
                     {
+                        _errorResponse.ErrorTime = DateTime.Now;
+                        _errorResponse.ErrorSourceMethod = "Edit Order Method";
+                        _errorResponse.Message = "Invalid state input";
+                        _errorResponse.Input = stateInput;
+                        _oops.SubmitErrorToLog(_errorResponse);
                         Console.WriteLine("Error occured!!");
                         Console.WriteLine(response.Message);
                         Console.ReadLine();
@@ -363,6 +381,11 @@ namespace FlooringApp.UI.WorkFlows
                     }
                     else
                     {
+                        _errorResponse.ErrorTime = DateTime.Now;
+                        _errorResponse.ErrorSourceMethod = "Edit Order Method";
+                        _errorResponse.Message = "Invalid product entry";
+                        _errorResponse.Input = productInput;
+                        _oops.SubmitErrorToLog(_errorResponse);
                         Console.WriteLine("Error Occurred!!!");
                         Console.WriteLine(response.Message);
                         Console.WriteLine("Press ENTER to continue");
@@ -400,12 +423,22 @@ namespace FlooringApp.UI.WorkFlows
                         }
                         else
                         {
+                            _errorResponse.ErrorTime = DateTime.Now;
+                            _errorResponse.ErrorSourceMethod = "Edit Order Method";
+                            _errorResponse.Message = "Negative area input";
+                            _errorResponse.Input = areaInputString;
+                            _oops.SubmitErrorToLog(_errorResponse);
                             Console.WriteLine("You must enter a value greater than 0!! Press ENTER to continue.");
                             Console.ReadLine();
                         }
                     }
                     else
                     {
+                        _errorResponse.ErrorTime = DateTime.Now;
+                        _errorResponse.ErrorSourceMethod = "Edit Order Method";
+                        _errorResponse.Message = "Invalid area input";
+                        _errorResponse.Input = areaInputString;
+                        _oops.SubmitErrorToLog(_errorResponse);
                         Console.WriteLine("That is not a number. Press ENTER to continue.");
                         Console.ReadLine();
                         Console.Clear();

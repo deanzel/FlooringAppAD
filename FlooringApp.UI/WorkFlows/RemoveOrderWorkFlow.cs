@@ -12,11 +12,13 @@ namespace FlooringApp.UI.WorkFlows
     {
         private Order _orderToRemove;
         public OrderOperations _oops;
+        private ErrorResponse _errorResponse;
 
         public RemoveOrderWorkFlow(OrderOperations oops)
         {
             _orderToRemove = new Order();
             _oops = oops;
+            _errorResponse = new ErrorResponse();
         }
 
         public void Execute()
@@ -68,6 +70,11 @@ namespace FlooringApp.UI.WorkFlows
                 //failing DateTime TryParse
                 else
                 {
+                    _errorResponse.ErrorTime = DateTime.Now;
+                    _errorResponse.ErrorSourceMethod = "Remove Order Method";
+                    _errorResponse.Message = "Invalid date time";
+                    _errorResponse.Input = dateInput;
+                    _oops.SubmitErrorToLog(_errorResponse);
                     Console.WriteLine("That is not a valid date. Press ENTER to continue.");
                     Console.ReadLine();
                 }
@@ -116,6 +123,11 @@ namespace FlooringApp.UI.WorkFlows
 
                 else
                 {
+                    _errorResponse.ErrorTime = DateTime.Now;
+                    _errorResponse.ErrorSourceMethod = "Remove Order Method";
+                    _errorResponse.Message = "Invalid order number";
+                    _errorResponse.Input = orderNumberInput;
+                    _oops.SubmitErrorToLog(_errorResponse);
                     Console.WriteLine("That is not a valid order number. Press ENTER to continue.");
                     Console.ReadLine();
                 }
