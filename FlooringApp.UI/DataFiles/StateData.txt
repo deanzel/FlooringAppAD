@@ -1,0 +1,5 @@
+StateAbbreviation,StateName,TaxRate
+OH,Ohio,6.25
+PA,Pennsylvania,6.75
+MI,Michigan,5.75
+IN,Indiana,6.00
