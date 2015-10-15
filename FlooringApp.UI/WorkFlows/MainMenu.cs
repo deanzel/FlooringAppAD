@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlooringApp.BLL;
 
 namespace FlooringApp.UI.WorkFlows
 {
     public class MainMenu
     {
+        public OrderOperations _oops;
+
+        public MainMenu(OrderOperations oops)
+        {
+            _oops = oops;
+        }
         public void Execute()
         {
             string input = "";
@@ -42,19 +49,19 @@ namespace FlooringApp.UI.WorkFlows
             switch (choice)
             {
                 case "1":
-                    DisplayOrdersWorkFlow dowf = new DisplayOrdersWorkFlow();
+                    DisplayOrdersWorkFlow dowf = new DisplayOrdersWorkFlow(_oops);
                     dowf.Execute();
                     break;
                 case "2":
-                    AddOrderWorkFlow aowf = new AddOrderWorkFlow();
+                    AddOrderWorkFlow aowf = new AddOrderWorkFlow(_oops);
                     aowf.Execute();
                     break;
                 case "3":
-                    EditOrderWorkFlow eowf = new EditOrderWorkFlow();
+                    EditOrderWorkFlow eowf = new EditOrderWorkFlow(_oops);
                     eowf.Execute();
                     break;
                 case "4":
-                    RemoveOrderWorkFlow rowf = new RemoveOrderWorkFlow();
+                    RemoveOrderWorkFlow rowf = new RemoveOrderWorkFlow(_oops);
                     rowf.Execute();
                     break;
                 default:

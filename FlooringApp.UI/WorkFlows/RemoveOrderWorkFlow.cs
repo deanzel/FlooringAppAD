@@ -11,10 +11,12 @@ namespace FlooringApp.UI.WorkFlows
     public class RemoveOrderWorkFlow
     {
         private Order _orderToRemove;
+        public OrderOperations _oops;
 
-        public RemoveOrderWorkFlow()
+        public RemoveOrderWorkFlow(OrderOperations oops)
         {
             _orderToRemove = new Order();
+            _oops = oops;
         }
 
         public void Execute()
@@ -123,9 +125,7 @@ namespace FlooringApp.UI.WorkFlows
 
         public void FetchOrderInfoToRemove()
         {
-            var oops = new OrderOperations();
-
-            var response = oops.GetOrderInfo(_orderToRemove);
+            var response = _oops.GetOrderInfo(_orderToRemove);
 
             if (response.Success)
             {
@@ -197,9 +197,7 @@ namespace FlooringApp.UI.WorkFlows
                     else if (input == "Y")
                     {
                         //Send to BLL for removal
-                        var oops = new OrderOperations();
-
-                        var response = oops.SubmitRemoveOrderToRepo(_orderToRemove);
+                        var response = _oops.SubmitRemoveOrderToRepo(_orderToRemove);
                         Console.WriteLine();
                         Console.WriteLine(response.Message);
                         Console.WriteLine("Press ENTER to continue.");

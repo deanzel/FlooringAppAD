@@ -11,11 +11,16 @@ namespace FlooringApp.UI.WorkFlows
     public class DisplayOrdersWorkFlow
     {
         private DateTime _orderDate;
+        public OrderOperations _oops;
 
+        public DisplayOrdersWorkFlow(OrderOperations oops)
+        {
+            _oops = oops;
+        }
         public void Execute()
         {
             _orderDate = PromptOrderDateFromUser();
-
+            
             DisplayOrdersFromDate();
         }
 
@@ -42,8 +47,8 @@ namespace FlooringApp.UI.WorkFlows
 
         public void DisplayOrdersFromDate()
         {
-            var ops = new OrderOperations();
-            var response = ops.GetOrdersFromDate(_orderDate);
+            
+            var response = _oops.GetOrdersFromDate(_orderDate);
 
             if (response.Success)
             {

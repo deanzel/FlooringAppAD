@@ -13,12 +13,15 @@ namespace FlooringApp.UI.WorkFlows
         private Order _orderInfo;
         private List<Product> _productsList;
         private bool _validOrderInfo;
+        public OrderOperations _oops;
 
-        public AddOrderWorkFlow()
+        public AddOrderWorkFlow(OrderOperations oops)
         {
+            _oops = oops;
             _orderInfo = new Order();
             _productsList = new List<Product>();
         }
+       
         public void Execute()
         {
             do
@@ -32,8 +35,8 @@ namespace FlooringApp.UI.WorkFlows
             } while (!_validOrderInfo);
 
             //method that sends order downstairs
-            var oops = new OrderOperations();
-            oops.SubmitOrderToRepo(_orderInfo);
+            
+            _oops.SubmitOrderToRepo(_orderInfo);
 
             DisplayOrderSubmitSuccess();
 
@@ -95,8 +98,8 @@ namespace FlooringApp.UI.WorkFlows
                     }
                 } while (stateInput.Length != 2);
 
-                var orderOperations = new OrderOperations();
-                var response = orderOperations.FetchStateTaxInfo(stateInput);
+                
+                var response = _oops.FetchStateTaxInfo(stateInput);
 
                 if (response.Success)
                 {
@@ -123,9 +126,7 @@ namespace FlooringApp.UI.WorkFlows
             bool validProductType = false;
             string productInput = "";
 
-            var oops = new OrderOperations();
-
-            _productsList = oops.FetchProductsList();
+            _productsList = _oops.FetchProductsList();
 
             do
             {
@@ -167,7 +168,7 @@ namespace FlooringApp.UI.WorkFlows
 
                 if (input == "Y")
                 {
-                    var response = oops.FetchProductInfo(productInput);
+                    var response = _oops.FetchProductInfo(productInput);
 
                     if (response.Success)
                     {

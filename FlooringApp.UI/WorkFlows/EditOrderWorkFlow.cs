@@ -17,11 +17,14 @@ namespace FlooringApp.UI.WorkFlows
 
         private bool exitToMainMenu;
 
-        public EditOrderWorkFlow()
+        public OrderOperations _oops;
+
+        public EditOrderWorkFlow(OrderOperations oops)
         {
             _orderToEdit = new Order();
             _orderPreEdit = new Order();
             exitToMainMenu = false;
+            _oops = oops;
         }
 
         public void Execute()
@@ -143,9 +146,7 @@ namespace FlooringApp.UI.WorkFlows
 
         public bool FetchOrderInfoToEdit()
         {
-            var oops = new OrderOperations();
-
-            var response = oops.GetOrderInfo(_orderToEdit);
+           var response = _oops.GetOrderInfo(_orderToEdit);
 
             if (response.Success)
             {
@@ -285,9 +286,7 @@ namespace FlooringApp.UI.WorkFlows
 
                 if (stateInput != "")
                 {
-
-                    var oops = new OrderOperations();
-                    var response = oops.FetchStateTaxInfo(stateInput);
+                    var response = _oops.FetchStateTaxInfo(stateInput);
 
                     if (response.Success)
                     {
@@ -312,7 +311,6 @@ namespace FlooringApp.UI.WorkFlows
             Console.WriteLine("Now we will edit Product Type.");
             do
             {
-                var oops = new OrderOperations();
                 string productInput = "";
                 string input = "";
 
@@ -329,7 +327,7 @@ namespace FlooringApp.UI.WorkFlows
                     }
                     if (input == "Y")
                     {
-                        var productsList = oops.FetchProductsList();
+                        var productsList = _oops.FetchProductsList();
                         Console.Clear();
                         Console.WriteLine(
                             "Here is a list of our products, CostPerSquareFoot, and LaborCostPerSquareFoot");
@@ -355,7 +353,7 @@ namespace FlooringApp.UI.WorkFlows
 
                 if (productInput != "")
                 {
-                    var response = oops.FetchProductInfo(productInput);
+                    var response = _oops.FetchProductInfo(productInput);
                     if (response.Success)
                     {
                         _orderPreEdit.ProductType = response.ProductInfo.ProductType;
@@ -519,8 +517,7 @@ namespace FlooringApp.UI.WorkFlows
             if (input == "Y")
             {
                 //Run method and updated orderInfo to BLL with orderEditPreview
-                var oops = new OrderOperations();
-                var response = oops.SubmitEditOrderToRepo(orderEditPreview);
+                var response = _oops.SubmitEditOrderToRepo(orderEditPreview);
                 Console.WriteLine(response.Message);
                 Console.WriteLine("\nPress ENTER to continue.");
                 Console.ReadLine();
