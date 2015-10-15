@@ -57,7 +57,6 @@ namespace FlooringApp.UI.WorkFlows
             }
             else
             {
-                Console.WriteLine("Error Occurred!!");
                 Console.WriteLine(response.Message);
                 Console.WriteLine("Press Enter to continue...");
                 Console.ReadLine();

@@ -88,7 +88,7 @@ namespace FlooringApp.UI.WorkFlows
                 do
                 {
                     Console.Clear();
-                    Console.Write("Enter the state abbreviation of where you're making this order (ex. TX for Texas): ");
+                    Console.Write("Enter the state abbreviation of where you're making this order (ex. OH for Ohio): ");
                     stateInput = Console.ReadLine();
                     if (stateInput.Length != 2)
                     {
@@ -203,9 +203,9 @@ namespace FlooringApp.UI.WorkFlows
         public void PromptAreaFromUser()
         {
             bool validArea = false;
-            bool validInt = false;
+            bool validDec = false;
             string areaInputString = "";
-            int areaInputInt;
+            decimal areaInputDecimal;
 
             do
             {
@@ -214,11 +214,11 @@ namespace FlooringApp.UI.WorkFlows
                 {
                     Console.Write("How many sqft of {0} would you like to purchase? ", _orderInfo.ProductType);
                     areaInputString = Console.ReadLine();
-                    if (int.TryParse(areaInputString, out areaInputInt))
+                    if (decimal.TryParse(areaInputString, out areaInputDecimal))
                     {
-                        if (areaInputInt > 0)
+                        if (areaInputDecimal > 0)
                         {
-                            validInt = true;
+                            validDec = true;
                         }
                         else
                         {
@@ -232,13 +232,13 @@ namespace FlooringApp.UI.WorkFlows
                         Console.ReadLine();
                         Console.Clear();
                     }
-                } while (!validInt);
-                Console.Write("Are you sure you want to purchase {0} sqft of {1}? (Y)es or (N)o: ", areaInputInt,
+                } while (!validDec);
+                Console.Write("Are you sure you want to purchase {0} sqft of {1}? (Y)es or (N)o: ", areaInputDecimal,
                     _orderInfo.ProductType);
                 string input = Console.ReadLine().ToUpper();
                 if (input == "Y")
                 {
-                    _orderInfo.Area = areaInputInt;
+                    _orderInfo.Area = areaInputDecimal;
                     _orderInfo.MaterialCost = _orderInfo.Area*_orderInfo.CostPerSquareFoot;
                     _orderInfo.LaborCost = _orderInfo.Area*_orderInfo.LaborCostPerSquareFoot;
                     decimal subtotal = (_orderInfo.MaterialCost + _orderInfo.LaborCost);
