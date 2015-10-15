@@ -2,6 +2,8 @@ take out error occurred in display orders on date without orders
 
 delete texas example
 
+States list?!?!?!
+
 only prompt them for product type confirmation if porudcct is valid
 
 change to decimal parse on add order
