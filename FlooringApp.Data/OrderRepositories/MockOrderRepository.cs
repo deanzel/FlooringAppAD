@@ -57,24 +57,38 @@ namespace FlooringApp.Data.OrderRepositories
                 for (int i = 1; i < reader.Length; i++)
                 {
                     var columns = reader[i].Split(',');
+                    int L = columns.Length;
 
                     var order = new Order();
 
-                    order.OrderNumber = int.Parse(columns[0]);
-                    order.CustomerName = columns[1];
-                    order.State = columns[2];
-                    order.TaxRate = decimal.Parse(columns[3]);
-                    order.ProductType = columns[4];
-                    order.Area = decimal.Parse(columns[5]);
-                    order.CostPerSquareFoot = decimal.Parse(columns[6]);
-                    order.LaborCostPerSquareFoot = decimal.Parse(columns[7]);
-                    order.MaterialCost = decimal.Parse(columns[8]);
-                    order.LaborCost = decimal.Parse(columns[9]);
-                    order.Tax = decimal.Parse(columns[10]);
-                    order.Total = decimal.Parse(columns[11]);
+                    order.OrderNumber = int.Parse(columns[0]); //first assignment
+
+                    for (int j = 1; j < L - 10; j++) //the name assignments
+                    {
+                        if (j == L - 11) //last one doesnt get comma
+                        {
+                            order.CustomerName += columns[j];
+                        }
+                        else //others get a comma
+                        {
+                            order.CustomerName += (columns[j] + ",");
+                        }
+                    }
+                    //the other assignments
+                    order.State = columns[L - 10];
+                    order.TaxRate = decimal.Parse(columns[L - 9]);
+                    order.ProductType = columns[L - 8];
+                    order.Area = decimal.Parse(columns[L - 7]);
+                    order.CostPerSquareFoot = decimal.Parse(columns[L - 6]);
+                    order.LaborCostPerSquareFoot = decimal.Parse(columns[L - 5]);
+                    order.MaterialCost = decimal.Parse(columns[L - 4]);
+                    order.LaborCost = decimal.Parse(columns[L - 3]);
+                    order.Tax = decimal.Parse(columns[L - 2]);
+                    order.Total = decimal.Parse(columns[L - 1]);
 
                     orders.Add(order);
                 }
+
             }
             return orders;
         }
