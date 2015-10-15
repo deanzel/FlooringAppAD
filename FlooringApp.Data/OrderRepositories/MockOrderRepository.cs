@@ -174,7 +174,7 @@ namespace FlooringApp.Data.OrderRepositories
 
             //find index of order to edit in ordersList
             int index = ordersList.IndexOf(OrderWithEdits);
-                //returns index. Index is -1 (negative 1) if cannot find match
+            //returns index. Index is -1 (negative 1) if cannot find match
 
             var response = new Response();
             if (index == -1)
@@ -200,13 +200,10 @@ namespace FlooringApp.Data.OrderRepositories
                         o.CostPerSquareFoot, o.LaborCostPerSquareFoot, o.MaterialCost, o.LaborCost, o.Tax, o.Total);
                 }
             }
-
             response.Success = true;
             response.Message = "The order was successfully edited!!";
 
             return response;
-
-
         }
     }
 }
