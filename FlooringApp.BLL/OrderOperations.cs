@@ -126,7 +126,7 @@ namespace FlooringApp.BLL
 
         public void SubmitErrorToLog(ErrorResponse ErrorInfo)
         {
-            // pass error to repo
+            _orderRepo.WriteErrorToLog(ErrorInfo);
         }
     }
 }
