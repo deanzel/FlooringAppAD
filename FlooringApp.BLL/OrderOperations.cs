@@ -16,7 +16,7 @@ namespace FlooringApp.BLL
         public OrderOperations()
         {
             _orderRepo = OrderRepositoryFactory.CreateOrderRepository();
-}
+        }
 
         public Response GetOrdersFromDate(DateTime orderDate)
         {
@@ -24,7 +24,7 @@ namespace FlooringApp.BLL
 
             var response = new Response();
 
-            if (orders.Count()==0)
+            if (orders.Count() == 0)
             {
                 response.Success = false;
                 response.Message = "There are no orders on this date.";
@@ -122,6 +122,11 @@ namespace FlooringApp.BLL
             var response = _orderRepo.EditOrderToRepo(OrderWithEdits);
 
             return response;
+        }
+
+        public void SubmitErrorToLog(ErrorResponse ErrorInfo)
+        {
+            // pass error to repo
         }
     }
 }
