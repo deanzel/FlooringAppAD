@@ -10,6 +10,8 @@ namespace FlooringApp.Data.OrderRepositories
 {
     public class ProdOrderRepository : IOrderRepository
     {
+        private DateTime _currentTime;
+        private string _errorLogPath;
         public ProdOrderRepository(string initialBuild)
         {
             if (initialBuild.ToUpper() == "Y")
@@ -40,6 +42,19 @@ namespace FlooringApp.Data.OrderRepositories
                         writer.WriteLine(i);
                     }
                 }
+            }
+
+            _currentTime = DateTime.Now;
+            string filePathErrorLog = @"DataFiles\Prod\ErrorLogs\ErrorLog_" + _currentTime.ToString("MMddyyyyhhmm") +
+                                      ".txt";
+
+            _errorLogPath = filePathErrorLog;
+
+            using (var writer = File.CreateText(_errorLogPath))
+            {
+                writer.WriteLine("This is the error log for the session starting at {0:G}.", _currentTime);
+                writer.WriteLine("--------------------------------------------------------------------------------");
+                writer.WriteLine();
             }
         }
 
@@ -212,6 +227,17 @@ namespace FlooringApp.Data.OrderRepositories
             response.Message = "The order was successfully edited!!";
 
             return response;
+        }
+        public void WriteErrorToLog(ErrorResponse ErrorInfo)
+        {
+            using (var writer = File.AppendText(_errorLogPath))
+            {
+                writer.WriteLine("Time: {0:G}", ErrorInfo.ErrorTime);
+                writer.WriteLine("Error Source Method: {0}", ErrorInfo.ErrorSourceMethod);
+                writer.WriteLine("Message: {0}", ErrorInfo.Message);
+                writer.WriteLine("User Input: {0}", ErrorInfo.Input);
+                writer.WriteLine();
+            }
         }
     }
 }
