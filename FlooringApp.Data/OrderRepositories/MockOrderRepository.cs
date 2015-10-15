@@ -47,6 +47,13 @@ namespace FlooringApp.Data.OrderRepositories
                 }
             }
 
+            //Creating Error Log file and folder (if folder is not there)
+            string filePathErrorLogFolder = @"DataFiles\Mock\ErrorLogs";
+            if (!Directory.Exists(filePathErrorLogFolder))
+            {
+                Directory.CreateDirectory(filePathErrorLogFolder);
+            }
+
             _currentTime = DateTime.Now;
             string filePathErrorLog = @"DataFiles\Mock\ErrorLogs\ErrorLog_" + _currentTime.ToString("MMddyyyyhhmm") +
                                       ".txt";

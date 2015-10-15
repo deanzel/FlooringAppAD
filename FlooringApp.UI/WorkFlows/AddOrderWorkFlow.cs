@@ -15,11 +15,14 @@ namespace FlooringApp.UI.WorkFlows
         private bool _validOrderInfo;
         public OrderOperations _oops;
 
+        private ErrorResponse _errorResponse;
+
         public AddOrderWorkFlow(OrderOperations oops)
         {
             _oops = oops;
             _orderInfo = new Order();
             _productsList = new List<Product>();
+            _errorResponse = new ErrorResponse();
         }
        
         public void Execute()
@@ -92,6 +95,12 @@ namespace FlooringApp.UI.WorkFlows
                     stateInput = Console.ReadLine();
                     if (stateInput.Length != 2)
                     {
+                        _errorResponse.ErrorTime = DateTime.Now;
+                        _errorResponse.ErrorSourceMethod = "Add Order Method";
+                        _errorResponse.Message = "State input not 2 letters long.";
+                        _errorResponse.Input = stateInput;
+                        _oops.SubmitErrorToLog(_errorResponse);
+
                         Console.WriteLine("That is not two letters. Press ENTER to continue.");
                         Console.ReadLine();
                         Console.Clear();
@@ -113,6 +122,12 @@ namespace FlooringApp.UI.WorkFlows
                 }
                 else
                 {
+                    _errorResponse.ErrorTime = DateTime.Now;
+                    _errorResponse.ErrorSourceMethod = "Add Order Method";
+                    _errorResponse.Message = "State input is not in the database.";
+                    _errorResponse.Input = stateInput;
+                    _oops.SubmitErrorToLog(_errorResponse);
+
                     Console.WriteLine("Error occured!!");
                     Console.WriteLine(response.Message);
                     Console.ReadLine();
@@ -149,6 +164,12 @@ namespace FlooringApp.UI.WorkFlows
 
                     if (productInput == "")
                     {
+                        _errorResponse.ErrorTime = DateTime.Now;
+                        _errorResponse.ErrorSourceMethod = "Add Order Method";
+                        _errorResponse.Message = "Product input is blank.";
+                        _errorResponse.Input = productInput;
+                        _oops.SubmitErrorToLog(_errorResponse);
+
                         Console.WriteLine("You must enter something. Press ENTER to conintue.");
                         Console.ReadLine();
                     }
@@ -185,6 +206,12 @@ namespace FlooringApp.UI.WorkFlows
                     }
                     else
                     {
+                        _errorResponse.ErrorTime = DateTime.Now;
+                        _errorResponse.ErrorSourceMethod = "Add Order Method";
+                        _errorResponse.Message = "Product type is not in the database.";
+                        _errorResponse.Input = productInput;
+                        _oops.SubmitErrorToLog(_errorResponse);
+
                         Console.WriteLine("Error occurred!!");
                         Console.WriteLine(response.Message);
                         Console.ReadLine();
@@ -222,13 +249,25 @@ namespace FlooringApp.UI.WorkFlows
                         }
                         else
                         {
+                            _errorResponse.ErrorTime = DateTime.Now;
+                            _errorResponse.ErrorSourceMethod = "Add Order Method";
+                            _errorResponse.Message = "Area input is not a number greater than 0.";
+                            _errorResponse.Input = areaInputString;
+                            _oops.SubmitErrorToLog(_errorResponse);
+
                             Console.WriteLine("You must enter a value greater than 0!! Press ENTER to continue.");
                             Console.ReadLine();
                         }
                     }
                     else
                     {
-                        Console.WriteLine("That is not an integer. Press ENTER to continue.");
+                        _errorResponse.ErrorTime = DateTime.Now;
+                        _errorResponse.ErrorSourceMethod = "Add Order Method";
+                        _errorResponse.Message = "Area input is not a number.";
+                        _errorResponse.Input = areaInputString;
+                        _oops.SubmitErrorToLog(_errorResponse);
+
+                        Console.WriteLine("That is not a number. Press ENTER to continue.");
                         Console.ReadLine();
                         Console.Clear();
                     }
