@@ -15,32 +15,34 @@ namespace FlooringApp.UI.WorkFlows
 
         private Order _orderPreEdit;
 
+        private bool exitToMainMenu;
+
         public EditOrderWorkFlow()
         {
             _orderToEdit = new Order();
             _orderPreEdit = new Order();
+            exitToMainMenu = false;
         }
 
         public void Execute()
         {
-
-          
-
             do
             {
                 PromptForOrderDate();
                 PromptForOrderNumber();
             } while (!FetchOrderInfoToEdit());
 
-            do
+            if (!exitToMainMenu)
             {
-                //edit stuff prompts
-                PromptForEditsFromUser();
+                do
+                {
+                    //edit stuff prompts
+                    PromptForEditsFromUser();
 
-                //Display new edits and calculations to confirm
+                    //Display new edits and calculations to confirm
 
-            } while (!ConfirmEditsToOrder());
-
+                } while (!ConfirmEditsToOrder());
+            }
         }
 
         public void PromptForOrderDate()
@@ -59,12 +61,12 @@ namespace FlooringApp.UI.WorkFlows
                     string input = "";
                     do
                     {
-                        Console.Write("Is {0:d} the correct order date? (Y)es or (N)o: ", orderDate);
+                        Console.Write("\nIs {0:d} the correct order date? (Y)es or (N)o: ", orderDate);
                         input = Console.ReadLine().ToUpper();
 
                         if (input != "Y" && input != "N")
                         {
-                            Console.WriteLine("That is not a valid input. Press ENTER to continue.");
+                            Console.WriteLine("\nThat is not a valid input. Press ENTER to continue.");
                             Console.ReadLine();
                         }
                     } while (input != "Y" && input != "N");
@@ -76,7 +78,7 @@ namespace FlooringApp.UI.WorkFlows
                     }
                     else
                     {
-                        Console.WriteLine("OK. We will enter a new order date. Press ENTER to continue.");
+                        Console.WriteLine("\nOK. We will enter a new order date. Press ENTER to continue.");
                         Console.ReadLine();
                     }
                 }
@@ -84,7 +86,7 @@ namespace FlooringApp.UI.WorkFlows
                 //failing DateTime TryParse
                 else
                 {
-                    Console.WriteLine("That is not a valid date. Press ENTER to continue.");
+                    Console.WriteLine("\nThat is not a valid date. Press ENTER to continue.");
                     Console.ReadLine();
                 }
 
@@ -107,11 +109,11 @@ namespace FlooringApp.UI.WorkFlows
                     string input = "";
                     do
                     {
-                        Console.Write("Is {0} the correct order number? (Y)es or (N)o: ", orderNumber);
+                        Console.Write("\nIs {0} the correct order number? (Y)es or (N)o: ", orderNumber);
                         input = Console.ReadLine().ToUpper();
                         if (input != "Y" && input != "N")
                         {
-                            Console.WriteLine("That is not a valid input. Press ENTER to continue.");
+                            Console.WriteLine("\nThat is not a valid input. Press ENTER to continue.");
                             Console.ReadLine();
                         }
 
@@ -123,7 +125,7 @@ namespace FlooringApp.UI.WorkFlows
                         }
                         else
                         {
-                            Console.WriteLine("OK. We will enter a new order number. Press ENTER to continue.");
+                            Console.WriteLine("\nOK. We will enter a new order number. Press ENTER to continue.");
                             Console.ReadLine();
 
                         }
@@ -132,7 +134,7 @@ namespace FlooringApp.UI.WorkFlows
 
                 else
                 {
-                    Console.WriteLine("That is not a valid order number. Press ENTER to continue.");
+                    Console.WriteLine("\nThat is not a valid order number. Press ENTER to continue.");
                     Console.ReadLine();
                 }
 
@@ -147,6 +149,7 @@ namespace FlooringApp.UI.WorkFlows
 
             if (response.Success)
             {
+                Console.Clear();
                 Console.WriteLine("This is the information for the order you want to edit.");
                 _orderToEdit.CustomerName = response.Order.CustomerName;
                 _orderToEdit.State = response.Order.State;
@@ -166,7 +169,8 @@ namespace FlooringApp.UI.WorkFlows
                 do
                 {
                     Console.Write(
-                        "Do you want to edit the Customer Name, State, Product Type, and/or Area in this order? (Y)es or (N)o: ");
+                        "Do you want to edit the Customer Name, State, Product Type, and/or Area in this order?" +
+                        "\n(Y)es to Edit, (N)o to Reenter Order Date/Number, or {Q}uit to Exit to Main Menu: ");
                     input = Console.ReadLine().ToUpper();
 
                     if (input == "Y")
@@ -177,7 +181,12 @@ namespace FlooringApp.UI.WorkFlows
                     {
                         return false;
                     }
-                    Console.WriteLine("That is an invalid entry. Press ENTER to continue.");
+                    if (input == "Q")
+                    {
+                        exitToMainMenu = true;
+                        return true;
+                    }
+                    Console.WriteLine("\nThat is an invalid entry. Press ENTER to continue.");
                     Console.ReadLine();
                 } while (true);
 
@@ -307,6 +316,10 @@ namespace FlooringApp.UI.WorkFlows
                         }
                     }
                 } while (input != "Y" && input != "N");
+
+                Console.WriteLine("\nPress ENTER to continue.");
+                Console.ReadLine();
+
                 Console.Clear();
                 Console.Write("Enter Product Type ({0}): ", _orderToEdit.ProductType);
                 productInput = Console.ReadLine();
@@ -337,17 +350,19 @@ namespace FlooringApp.UI.WorkFlows
             } while (!validProductType);
 
             //Prompt to edit Area
-            string areaInputString = "";
-            int areaInputInt;
+            
             bool validInt = false;
 
             Console.Clear();
             do
             {
+                string areaInputString = "";
+                
                 Console.Write("Enter Area in sqft ({0}): ", _orderToEdit.Area);
                 areaInputString = Console.ReadLine();
                 if (areaInputString != "")
                 {
+                    int areaInputInt;
 
                     if (int.TryParse(areaInputString, out areaInputInt))
                     {
@@ -381,11 +396,10 @@ namespace FlooringApp.UI.WorkFlows
         {
             Console.Clear();
             
-            
             //Find and set what needs to be changed while printing the changes out.
 
             Order orderEditPreview = new Order();
-            if (_orderPreEdit.CustomerName != null)
+            if (_orderPreEdit.CustomerName != "")
             {
                 orderEditPreview.CustomerName = _orderPreEdit.CustomerName;
                 Console.WriteLine("You changed Customer Name from {0} to {1}.", _orderToEdit.CustomerName, orderEditPreview.CustomerName);
@@ -451,10 +465,12 @@ namespace FlooringApp.UI.WorkFlows
             Console.WriteLine("State: {0}", orderEditPreview.State);
             Console.WriteLine("Product Type: {0}", orderEditPreview.ProductType);
             Console.WriteLine("Area : {0} sqft", orderEditPreview.Area);
+            Console.WriteLine();
             Console.WriteLine("Materials Cost: {0:c}", orderEditPreview.MaterialCost);
             Console.WriteLine("Labor Cost: {0:c}", orderEditPreview.LaborCost);
             Console.WriteLine("Subtotal: {0:c}", orderEditPreview.Total - orderEditPreview.Tax);
             Console.WriteLine("Tax: {0:c}", orderEditPreview.Tax);
+            Console.WriteLine();
             Console.WriteLine("TOTAL COST: {0:c}", orderEditPreview.Total);
             Console.WriteLine();
 
@@ -476,6 +492,7 @@ namespace FlooringApp.UI.WorkFlows
                 var oops = new OrderOperations();
                 var response = oops.SubmitEditOrderToRepo(orderEditPreview);
                 Console.WriteLine(response.Message);
+                Console.WriteLine("\nPress ENTER to continue.");
                 Console.ReadLine();
                 return true;
 

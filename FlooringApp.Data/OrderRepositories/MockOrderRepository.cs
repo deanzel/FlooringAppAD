@@ -169,28 +169,24 @@ namespace FlooringApp.Data.OrderRepositories
             filePath += OrderWithEdits.OrderDate.ToString("MMddyyyy") + ".txt";
 
             var ordersList = GetOrdersFromDate(OrderWithEdits.OrderDate);
-
-            var order = ordersList.First(o => o.OrderNumber == OrderWithEdits.OrderNumber);
-
-            order = OrderWithEdits;
+            var ordersListMod = ordersList.Where(o => o.OrderNumber != OrderWithEdits.OrderNumber);
             
-            File.Delete(filePath);
+            List<Order> ordersFinalEdit = ordersListMod.ToList();
 
+            ordersFinalEdit.Add(OrderWithEdits);
+
+            var ordersEditedListSorted = ordersFinalEdit.OrderBy(o => o.OrderNumber);
+            
             using (var writer = File.CreateText(filePath))
             {
                 writer.WriteLine("OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
-                foreach (var o in ordersList)
+                foreach (var o in ordersEditedListSorted)
                 {
                     writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", o.OrderNumber,
                         o.CustomerName, o.State, o.TaxRate, o.ProductType, o.Area,
                         o.CostPerSquareFoot, o.LaborCostPerSquareFoot, o.MaterialCost, o.LaborCost, o.Tax, o.Total);
                 }
-
-                //writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", OrderWithEdits.OrderNumber,
-                //        OrderWithEdits.CustomerName, OrderWithEdits.State, OrderWithEdits.TaxRate, OrderWithEdits.ProductType, OrderWithEdits.Area,
-                //        OrderWithEdits.CostPerSquareFoot, OrderWithEdits.LaborCostPerSquareFoot, OrderWithEdits.MaterialCost,
-                //        OrderWithEdits.LaborCost, OrderWithEdits.Tax, OrderWithEdits.Total);
 
             }
 

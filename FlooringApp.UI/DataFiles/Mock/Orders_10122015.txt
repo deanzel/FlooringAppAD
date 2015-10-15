@@ -1,3 +1,0 @@
-OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
-9,Wisey2,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88
-10,Choiy2,OH,6.25,Wood,100.00,5.15,4.75,515.00,475.00,61.88,1051.88

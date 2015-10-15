@@ -55,11 +55,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataFiles\Orders_06012013.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\FlooringApp.BLL\FlooringApp.BLL.csproj">
       <Project>{886d5ae2-0361-4ead-b70e-e8bc8a0f6a5d}</Project>
       <Name>FlooringApp.BLL</Name>
