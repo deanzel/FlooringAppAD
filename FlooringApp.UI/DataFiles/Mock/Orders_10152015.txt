@@ -1,3 +1,0 @@
-OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
-13,,OH,6.25,TILE,10,3.50,4.15,35.00,41.50,4.781250,81.281250
-14,Dean,OH,6.25,CARPET,100,2.25,2.10,225.00,210.00,27.187500,462.187500

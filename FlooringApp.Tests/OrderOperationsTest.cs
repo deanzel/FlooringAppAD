@@ -12,7 +12,7 @@ namespace FlooringApp.Tests
     [TestFixture]
     public class OrderOperationsTest
     {
-        OrderOperations oops;
+        private OrderOperations oops;
 
         [SetUp]
         public void oopSetup()
@@ -20,12 +20,23 @@ namespace FlooringApp.Tests
             oops = new OrderOperations();
         }
 
-        [TestCase(DateTime.Now, {})]
-        public void GetOrdersFromDateTest(DateTime input, Response expected)
+        [TestCase("06/03/2013", true)]
+        [TestCase("10/16/2015", false)]
+        [TestCase("10/17/2015", false)]
+        public void GetOrdersFromDateTest(string input, bool expected)
         {
-            Response actual = oops.GetOrdersFromDate(input);
+            DateTime convertedInput = DateTime.Parse(input);
+
+            Response response = oops.GetOrdersFromDate(convertedInput);
+
+            bool actual = response.Success;
 
             Assert.AreEqual(expected, actual);
         }
+
+
+        //GetOrderInfo test case
+
+    
     }
 }
