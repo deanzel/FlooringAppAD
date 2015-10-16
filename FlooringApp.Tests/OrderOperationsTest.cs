@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using FlooringApp.BLL;
 using FlooringApp.Models;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 
 namespace FlooringApp.Tests
 {
     [TestFixture]
     public class OrderOperationsTest
     {
-        OrderOperations oops;
+        private OrderOperations oops;
 
         [SetUp]
         public void oopSetup()
@@ -20,12 +21,23 @@ namespace FlooringApp.Tests
             oops = new OrderOperations();
         }
 
-        [TestCase(DateTime.Now, {})]
-        public void GetOrdersFromDateTest(DateTime input, Response expected)
+        [TestCase("10/15/2015", false)]
+        [TestCase("10/14/2015", true)]
+        public void GetOrdersFromDateTest(string input, bool expected)
         {
-            Response actual = oops.GetOrdersFromDate(input);
+            DateTime convertedInput = DateTime.Parse(input);
+            
+            Response actual = oops.GetOrdersFromDate(convertedInput);
 
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(expected, actual.Success);
         }
+
+        //[Test]
+        //public void FetchListOfStatesTest()
+        //{
+        //    var actual = oops.FetchListOfStates();
+
+        //    Assert.AreEqual(true, actual.Count() != 0);
+        //}
     }
 }
