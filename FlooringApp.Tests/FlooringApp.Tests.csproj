@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,10 +44,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrderOperationsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataFiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlooringApp.BLL\FlooringApp.BLL.csproj">
+      <Project>{886d5ae2-0361-4ead-b70e-e8bc8a0f6a5d}</Project>
+      <Name>FlooringApp.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlooringApp.Data\FlooringApp.Data.csproj">
+      <Project>{2584c0d9-2a5e-4c94-ad5c-41372d0d3fd6}</Project>
+      <Name>FlooringApp.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FlooringApp.Models\FlooringApp.Models.csproj">
+      <Project>{67bbb9cf-460b-47d9-8d53-55510e25924d}</Project>
+      <Name>FlooringApp.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
