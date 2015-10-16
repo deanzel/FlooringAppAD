@@ -1,0 +1,49 @@
+Main Menu:
+-Get rid of space between Quit and Enter Choice
+
+Display Orders:-
+-Order date entry:
+  -For invalid order date, add space 
+-Display orders:
+  -Add press ENTER to continue.
+  -Add sqft unit label to Area
+  -Cost per sqft
+  -Add break line between Tax and Total
+Add an Order:
+-Name entry:
+  -Add space before confirmation prompt
+-State entry:
+  -"List of States that we service:"
+  -For invalid state entry, add space before error message
+  -Add space after confirmation
+-Product entry:
+  -Add break line between products list and product entry prompt
+  -"Here is a list of our products"
+  -For empty entry, clear screen and display everything again
+  -Add spacing for invalid entries message
+-Area entry:
+  -Display cost rates again
+  -Add spaces for error messages
+  -Clear screen for numbers less than 0
+-Order summary:
+  -Add break line for total
+  -Add right justification for price
+  -Clean up order confirmation message
+
+Edit an Order:
+-Date entry:
+  -Clear screen for invalid confirmation input
+
+Remove an Order:
+-Date entry:
+  -Invalid date entry, add space to error message
+  -When confirming order date to remove, clear screen
+-Order number entry:
+  -Add space to error
+  -Clear screen for order number confirmation
+-Order display:
+  -clear screen for order display
+  -get rid of extra spaces for remove order confirmation
+  -clear screen adn display everything for no not putting in Y or N
+  -Add break line and right justify order display
+  -add sqft to area

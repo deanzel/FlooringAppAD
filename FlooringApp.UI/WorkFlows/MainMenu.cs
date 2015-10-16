@@ -21,19 +21,19 @@ namespace FlooringApp.UI.WorkFlows
             do
             {
                 Console.Clear();
-                Console.WriteLine("WELCOME TO FLOORING ORDERS MANAGEMENT by Andrew & Dean");
-                Console.WriteLine("------------------------------------------------------");
-                Console.WriteLine();
-                Console.WriteLine("1. Display Orders");
-                Console.WriteLine("2. Add an Order");
-                Console.WriteLine("3. Edit an Order");
-                Console.WriteLine("4. Remove an Order");
-                Console.WriteLine();
-                Console.WriteLine("(Q) to Quit");
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine("Enter Choice: ");
-
+                Console.WriteLine("----------------------------------------------------------");
+                Console.WriteLine("| WELCOME TO FLOORING ORDERS MANAGEMENT by Andrew & Dean |");
+                Console.WriteLine("----------------------------------------------------------");
+                Console.WriteLine("|                                                        |");
+                Console.WriteLine("| 1. Display Orders                                      |");
+                Console.WriteLine("| 2. Add an Order                                        |");
+                Console.WriteLine("| 3. Edit an Order                                       |");
+                Console.WriteLine("| 4. Remove an Order                                     |");
+                Console.WriteLine("| Q. to Quit                                             |");
+                Console.WriteLine("|                                                        |");
+                Console.WriteLine("----------------------------------------------------------");
+                Console.Write("Enter choice: ");
+               
                 input = Console.ReadLine();
 
                 if (input.ToUpper() != "Q")

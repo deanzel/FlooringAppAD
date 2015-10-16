@@ -144,9 +144,9 @@ namespace FlooringApp.Data.OrderRepositories
             string filePathOrderHistory = @"DataFiles\Prod\OrderNumbersHistory.txt";
             var reader = File.ReadAllLines(filePathOrderHistory);
             int[] readerInts = Array.ConvertAll(reader, int.Parse);
-
+            
             NewOrder.OrderNumber = readerInts.Max() + 1;
-
+            
             if (File.Exists(filePath))
             {
                 using (var writer = File.AppendText(filePath))

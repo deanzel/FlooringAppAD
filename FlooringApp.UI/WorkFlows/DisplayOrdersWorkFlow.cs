@@ -44,7 +44,8 @@ namespace FlooringApp.UI.WorkFlows
                 _errorResponse.Message = "Invalid date time";
                 _errorResponse.Input = input;
                 _oops.SubmitErrorToLog(_errorResponse);
-                Console.WriteLine("That was not a valid order date...");
+                Console.WriteLine();
+                Console.WriteLine("That was not a valid order date.");
                 Console.WriteLine("Press Enter to continue...");
                 Console.ReadLine();
 
@@ -81,16 +82,17 @@ namespace FlooringApp.UI.WorkFlows
                 Console.WriteLine("Order Number: {0}", order.OrderNumber);
                 Console.WriteLine("Customer Name: {0}", order.CustomerName);
                 Console.WriteLine("State: {0}", order.State);
-                Console.WriteLine("Tax Rate: {0}%", order.TaxRate);
                 Console.WriteLine("Product Type: {0}", order.ProductType);
-                Console.WriteLine("Area: {0}", order.Area);
-                Console.WriteLine("Cost Per Square Foot: {0:C}", order.CostPerSquareFoot);
-                Console.WriteLine("Labor Cost Per Square Foot: {0:C}", order.LaborCostPerSquareFoot);
+                Console.WriteLine("Material Cost ($/sqft): {0:C}", order.CostPerSquareFoot);
+                Console.WriteLine("Labor Cost ($sqft): {0:C}", order.LaborCostPerSquareFoot);
+                Console.WriteLine("Area (sqft): {0}", order.Area);
                 Console.WriteLine("Material Cost: {0:C}", order.MaterialCost);
                 Console.WriteLine("Labor Cost: {0:C}", order.LaborCost);
+                Console.WriteLine("Tax Rate: {0}%", order.TaxRate);
                 Console.WriteLine("Tax: {0:C}", order.Tax);
                 Console.WriteLine("Total: {0:C}", order.Total);
                 Console.WriteLine();
+                Console.WriteLine("Press ENTER to continue...");
 
             }
         }
