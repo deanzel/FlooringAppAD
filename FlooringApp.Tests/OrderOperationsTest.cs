@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using FlooringApp.BLL;
@@ -20,6 +21,8 @@ namespace FlooringApp.Tests
             _oops = new OrderOperations();
         }
 
+
+        //GetOrdersFromDate Test Cases
         [TestCase("06/01/2013", true)]
         [TestCase("10/12/2015", true)]
         [TestCase("10/16/2015", false)]
@@ -36,7 +39,9 @@ namespace FlooringApp.Tests
         }
 
 
-        //GetOrderInfo test case
+        //GetOrderInfo Test Cases
+
+        RandomNumberGenerator
 
     
     }
