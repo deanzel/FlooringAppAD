@@ -12,6 +12,7 @@ namespace FlooringApp.Data.OrderRepositories
     {
         private DateTime _currentTime;
         private string _errorLogPath;
+        
         public ProdOrderRepository(string initialBuild)
         {
             if (initialBuild.ToUpper() == "Y")
@@ -79,9 +80,11 @@ namespace FlooringApp.Data.OrderRepositories
             string filePath = @"DataFiles\Prod\Orders_";
             filePath += orderDate.ToString("MMddyyyy") + ".txt";
 
-            List<Order> orders = new List<Order>();
+            List<Order> orders = null;
+
             if (File.Exists(filePath))
             {
+                orders = new List<Order>();
                 var reader = File.ReadAllLines(filePath);
 
                 for (int i = 1; i < reader.Length; i++)
@@ -120,6 +123,7 @@ namespace FlooringApp.Data.OrderRepositories
                 }
 
             }
+            
             return orders;
         }
 
