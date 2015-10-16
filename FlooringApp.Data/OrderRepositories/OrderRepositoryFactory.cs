@@ -18,8 +18,10 @@ namespace FlooringApp.Data.OrderRepositories
             {
                 case "prod":
                     return new ProdOrderRepository(initialBuild);
-                default: //"mock"
+                case "mock":
                     return new MockOrderRepository(initialBuild);
+                default:
+                    throw new NotSupportedException();
             }
         }
 
