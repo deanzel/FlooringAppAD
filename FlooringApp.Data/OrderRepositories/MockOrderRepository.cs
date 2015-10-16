@@ -172,26 +172,13 @@ namespace FlooringApp.Data.OrderRepositories
 
         public Response RemoveOrderFromRepo(Order OrderToRemove)
         {
-            string filePath = @"DataFiles\Mock\Orders_";
-            filePath += OrderToRemove.OrderDate.ToString("MMddyyyy") + ".txt";
+            string dictionaryKeyDate = OrderToRemove.OrderDate.ToString("MMddyyyy");
 
-            var ordersList = GetOrdersFromDate(OrderToRemove.OrderDate);
+            List<Order> ordersComplete = new List<Order>();
 
-            var newOrdersList = ordersList.Where(o => o.OrderNumber != OrderToRemove.OrderNumber);
+            _ordersDictionary.TryGetValue(dictionaryKeyDate, out ordersComplete);
 
-            //using (var writer = File.CreateText(filePath))
-            //{
-            //    writer.WriteLine(
-            //        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
-
-            //    foreach (var order in newOrdersList)
-            //    {
-            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
-            //            order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
-            //            order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost,
-            //            order.Tax, order.Total);
-            //    }
-            //}
+            ordersComplete.RemoveAll(o => o.OrderNumber == OrderToRemove.OrderNumber);
 
             var response = new Response();
             response.Success = true;
@@ -202,39 +189,18 @@ namespace FlooringApp.Data.OrderRepositories
 
         public Response EditOrderToRepo(Order OrderWithEdits)
         {
-            string filePath = @"DataFiles\Mock\Orders_";
-            filePath += OrderWithEdits.OrderDate.ToString("MMddyyyy") + ".txt";
+            string dictionaryKeyDate = OrderWithEdits.OrderDate.ToString("MMddyyyy");
 
-            var ordersList = GetOrdersFromDate(OrderWithEdits.OrderDate);
+            List<Order> ordersComplete = new List<Order>();
 
-            //find index of order to edit in ordersList
-            int index = ordersList.IndexOf(OrderWithEdits);
-            //returns index. Index is -1 (negative 1) if cannot find match
+            _ordersDictionary.TryGetValue(dictionaryKeyDate, out ordersComplete);
+
+            ordersComplete.RemoveAll(o => o.OrderNumber == OrderWithEdits.OrderNumber);
+
+            ordersComplete.Add(OrderWithEdits);
 
             var response = new Response();
-            if (index == -1)
-            {
 
-                response.Success = false;
-                response.Message = "Failed to find order in system. Internal glitch. Report to admin";
-                return response;
-            }
-
-            //use index number to make direct reference type modification
-            ordersList[index] = OrderWithEdits;
-
-            //using (var writer = File.CreateText(filePath))
-            //{
-            //    writer.WriteLine(
-            //        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
-
-            //    foreach (var o in ordersList)
-            //    {
-            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", o.OrderNumber,
-            //            o.CustomerName, o.State, o.TaxRate, o.ProductType, o.Area,
-            //            o.CostPerSquareFoot, o.LaborCostPerSquareFoot, o.MaterialCost, o.LaborCost, o.Tax, o.Total);
-            //    }
-            //}
             response.Success = true;
             response.Message = "The order was successfully edited!!";
 
