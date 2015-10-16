@@ -12,22 +12,23 @@ namespace FlooringApp.Tests
     [TestFixture]
     public class OrderOperationsTest
     {
-        private OrderOperations oops;
+        private OrderOperations _oops;
 
         [SetUp]
         public void oopSetup()
         {
-            oops = new OrderOperations();
+            _oops = new OrderOperations();
         }
 
-        [TestCase("06/03/2013", true)]
+        [TestCase("06/01/2013", true)]
+        [TestCase("10/12/2015", true)]
         [TestCase("10/16/2015", false)]
         [TestCase("10/17/2015", false)]
         public void GetOrdersFromDateTest(string input, bool expected)
         {
             DateTime convertedInput = DateTime.Parse(input);
 
-            Response response = oops.GetOrdersFromDate(convertedInput);
+            Response response = _oops.GetOrdersFromDate(convertedInput);
 
             bool actual = response.Success;
 
