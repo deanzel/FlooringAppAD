@@ -21,6 +21,7 @@ namespace FlooringApp.Tests
             oops = new OrderOperations();
         }
 
+<<<<<<< HEAD
         [TestCase("10/15/2015", false)]
         [TestCase("10/14/2015", true)]
         public void GetOrdersFromDateTest(string input, bool expected)
@@ -28,10 +29,23 @@ namespace FlooringApp.Tests
             DateTime convertedInput = DateTime.Parse(input);
             
             Response actual = oops.GetOrdersFromDate(convertedInput);
+=======
+        [TestCase("06/03/2013", true)]
+        [TestCase("10/16/2015", false)]
+        [TestCase("10/17/2015", false)]
+        public void GetOrdersFromDateTest(string input, bool expected)
+        {
+            DateTime convertedInput = DateTime.Parse(input);
+
+            Response response = oops.GetOrdersFromDate(convertedInput);
+
+            bool actual = response.Success;
+>>>>>>> 0264cd288cd684b2a786075cbb155616deee8774
 
             Assert.AreEqual(expected, actual.Success);
         }
 
+<<<<<<< HEAD
         //[Test]
         //public void FetchListOfStatesTest()
         //{
@@ -39,5 +53,11 @@ namespace FlooringApp.Tests
 
         //    Assert.AreEqual(true, actual.Count() != 0);
         //}
+=======
+
+        //GetOrderInfo test case
+
+    
+>>>>>>> 0264cd288cd684b2a786075cbb155616deee8774
     }
 }

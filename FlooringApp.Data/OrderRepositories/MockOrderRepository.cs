@@ -23,6 +23,14 @@ namespace FlooringApp.Data.OrderRepositories
                 string filePath = @"DataFiles\Mock\";
                 string filePathHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
 
+                //Creates Mock folder if not there
+                string filePathMockFolder = @"DataFiles\Mock";
+                if (!Directory.Exists(filePathMockFolder))
+                {
+                    Directory.CreateDirectory(filePathMockFolder);
+                }
+
+
                 string[] orderNames = Directory.GetFiles(filePath, "Orders_*.txt");
 
                 List<int> orderNumbersHistory = new List<int>();
@@ -63,6 +71,7 @@ namespace FlooringApp.Data.OrderRepositories
             using (var writer = File.CreateText(_errorLogPath))
             {
                 writer.WriteLine("This is the error log for the session starting at {0:G}.", _currentTime);
+                writer.WriteLine();
                 writer.WriteLine("--------------------------------------------------------------------------------");
                 writer.WriteLine();
             }
@@ -141,34 +150,34 @@ namespace FlooringApp.Data.OrderRepositories
 
             NewOrder.OrderNumber = readerInts.Max() + 1;
 
-            if (File.Exists(filePath))
-            {
-                using (var writer = File.AppendText(filePath))
-                {
-                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
-                        NewOrder.CustomerName,
-                        NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
-                        NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
-                        NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
-                }
-            }
-            else
-            {
-                using (var writer = File.CreateText(filePath))
-                {
-                    writer.WriteLine(
-                        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
-                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
-                        NewOrder.CustomerName,
-                        NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
-                        NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
-                        NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
-                }
-            }
-            using (var writer = File.AppendText(filePathOrderHistory))
-            {
-                writer.WriteLine(NewOrder.OrderNumber);
-            }
+            //if (File.Exists(filePath))
+            //{
+            //    using (var writer = File.AppendText(filePath))
+            //    {
+            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
+            //            NewOrder.CustomerName,
+            //            NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
+            //            NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
+            //            NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
+            //    }
+            //}
+            //else
+            //{
+            //    using (var writer = File.CreateText(filePath))
+            //    {
+            //        writer.WriteLine(
+            //            "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
+            //            NewOrder.CustomerName,
+            //            NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
+            //            NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
+            //            NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
+            //    }
+            //}
+            //using (var writer = File.AppendText(filePathOrderHistory))
+            //{
+            //    writer.WriteLine(NewOrder.OrderNumber);
+            //}
 
             return NewOrder;
         }
@@ -182,19 +191,19 @@ namespace FlooringApp.Data.OrderRepositories
 
             var newOrdersList = ordersList.Where(o => o.OrderNumber != OrderToRemove.OrderNumber);
 
-            using (var writer = File.CreateText(filePath))
-            {
-                writer.WriteLine(
-                    "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+            //using (var writer = File.CreateText(filePath))
+            //{
+            //    writer.WriteLine(
+            //        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
-                foreach (var order in newOrdersList)
-                {
-                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
-                        order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
-                        order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost,
-                        order.Tax, order.Total);
-                }
-            }
+            //    foreach (var order in newOrdersList)
+            //    {
+            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
+            //            order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
+            //            order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost,
+            //            order.Tax, order.Total);
+            //    }
+            //}
 
             var response = new Response();
             response.Success = true;
@@ -226,18 +235,18 @@ namespace FlooringApp.Data.OrderRepositories
             //use index number to make direct reference type modification
             ordersList[index] = OrderWithEdits;
 
-            using (var writer = File.CreateText(filePath))
-            {
-                writer.WriteLine(
-                    "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
+            //using (var writer = File.CreateText(filePath))
+            //{
+            //    writer.WriteLine(
+            //        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
 
-                foreach (var o in ordersList)
-                {
-                    writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", o.OrderNumber,
-                        o.CustomerName, o.State, o.TaxRate, o.ProductType, o.Area,
-                        o.CostPerSquareFoot, o.LaborCostPerSquareFoot, o.MaterialCost, o.LaborCost, o.Tax, o.Total);
-                }
-            }
+            //    foreach (var o in ordersList)
+            //    {
+            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", o.OrderNumber,
+            //            o.CustomerName, o.State, o.TaxRate, o.ProductType, o.Area,
+            //            o.CostPerSquareFoot, o.LaborCostPerSquareFoot, o.MaterialCost, o.LaborCost, o.Tax, o.Total);
+            //    }
+            //}
             response.Success = true;
             response.Message = "The order was successfully edited!!";
 

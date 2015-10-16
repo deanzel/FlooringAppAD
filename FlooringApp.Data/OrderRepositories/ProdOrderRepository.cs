@@ -20,6 +20,14 @@ namespace FlooringApp.Data.OrderRepositories
                 string filePath = @"DataFiles\Prod\";
                 string filePathHistory = @"DataFiles\Prod\OrderNumbersHistory.txt";
 
+                //Creates Prod folder if not there
+                string filePathProdFolder = @"DataFiles\Prod";
+                if (!Directory.Exists(filePathProdFolder))
+                {
+                    Directory.CreateDirectory(filePathProdFolder);
+                }
+
+
                 string[] orderNames = Directory.GetFiles(filePath, "Orders_*.txt");
 
                 List<int> orderNumbersHistory = new List<int>();
@@ -60,6 +68,7 @@ namespace FlooringApp.Data.OrderRepositories
             using (var writer = File.CreateText(_errorLogPath))
             {
                 writer.WriteLine("This is the error log for the session starting at {0:G}.", _currentTime);
+                writer.WriteLine();
                 writer.WriteLine("--------------------------------------------------------------------------------");
                 writer.WriteLine();
             }
@@ -118,7 +127,12 @@ namespace FlooringApp.Data.OrderRepositories
         {
             List<Order> orders = GetOrdersFromDate(OrderInfo.OrderDate);
 
-            return orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
+            Order updatedOrderInfo = new Order();
+            updatedOrderInfo = orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
+
+            OrderInfo = updatedOrderInfo;
+
+            return OrderInfo;
         }
 
         public Order WriteNewOrderToRepo(Order NewOrder)
@@ -167,7 +181,7 @@ namespace FlooringApp.Data.OrderRepositories
 
         public Response RemoveOrderFromRepo(Order OrderToRemove)
         {
-            string filePath = @"DataFiles\Prod\Order_";
+            string filePath = @"DataFiles\Prod\Orders_";
             filePath += OrderToRemove.OrderDate.ToString("MMddyyyy") + ".txt";
 
             var ordersList = GetOrdersFromDate(OrderToRemove.OrderDate);
