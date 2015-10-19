@@ -138,14 +138,14 @@ namespace FlooringApp.Data.OrderRepositories
                 updatedOrderInfo = orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
 
                 OrderInfo = updatedOrderInfo;
-
-                return OrderInfo;
             }
 
             else
             {
-                return updatedOrderInfo;
+                OrderInfo = null;
             }
+
+            return OrderInfo;
         }
 
         public Order WriteNewOrderToRepo(Order NewOrder)
