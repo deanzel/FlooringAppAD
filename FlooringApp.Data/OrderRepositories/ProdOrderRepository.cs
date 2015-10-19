@@ -222,7 +222,7 @@ namespace FlooringApp.Data.OrderRepositories
 
         public Response EditOrderToRepo(Order OrderWithEdits)
         {
-            string filePath = @"DateFiles\Prod\Orders_";
+            string filePath = @"DataFiles\Prod\Orders_";
             filePath += OrderWithEdits.OrderDate.ToString("MMddyyyy") + ".txt";
 
             var ordersList = GetOrdersFromDate(OrderWithEdits.OrderDate);

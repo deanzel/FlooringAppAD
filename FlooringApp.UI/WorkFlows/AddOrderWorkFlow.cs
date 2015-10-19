@@ -364,15 +364,8 @@ namespace FlooringApp.UI.WorkFlows
                 _orderInfo.OrderDate = DateTime.Now;
                 _validOrderInfo = true;
             }
-            else
-            {
-                Console.WriteLine();
-                Console.WriteLine("OK. We will now reenter all your new order information");
-                Console.WriteLine("Press ENTER to continue...");
-                Console.ReadLine();
-            }
         }
-        
+
         public void DisplayOrderSubmitSuccess()
         {
             Console.Clear();
