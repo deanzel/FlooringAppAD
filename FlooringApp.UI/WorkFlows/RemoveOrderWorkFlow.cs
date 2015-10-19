@@ -11,7 +11,7 @@ namespace FlooringApp.UI.WorkFlows
     public class RemoveOrderWorkFlow
     {
         private Order _orderToRemove;
-        public OrderOperations _oops;
+        private OrderOperations _oops;
         private ErrorResponse _errorResponse;
 
         public RemoveOrderWorkFlow(OrderOperations oops)
@@ -26,7 +26,7 @@ namespace FlooringApp.UI.WorkFlows
             PromptForOrderDate();
             PromptForOrderNumber();
             FetchOrderInfoToRemove();
-            
+
         }
 
         public void PromptForOrderDate()
@@ -36,23 +36,29 @@ namespace FlooringApp.UI.WorkFlows
             do
             {
                 Console.Clear();
-                Console.Write("What date did you place the order on? (MM/DD/YYYY): ");
+                Console.Write("What is your Order Date? (MM/DD/YYYY): ");
                 string dateInput = Console.ReadLine();
+                Console.WriteLine();
+
                 DateTime orderDate;
 
-                if (DateTime.TryParse(dateInput, out orderDate))
+                if (dateInput == "")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("You must enter an Order Date.");
+                    Console.WriteLine("Press ENTER to continue...");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                }
+
+                else if (DateTime.TryParse(dateInput, out orderDate))
                 {
                     string input = "";
                     do
                     {
-                        Console.Write("Is {0:d} the correct order date? (Y)es or (N)o: ", orderDate);
+                        Console.Write("Is {0:d} the correct Order Date? (Y)es or (N)o: ", orderDate);
                         input = Console.ReadLine().ToUpper();
 
-                        if (input != "Y" && input != "N")
-                        {
-                            Console.WriteLine("That is not a valid input. Press ENTER to continue.");
-                            Console.ReadLine();
-                        }
                     } while (input != "Y" && input != "N");
 
                     if (input == "Y")
@@ -60,14 +66,8 @@ namespace FlooringApp.UI.WorkFlows
                         _orderToRemove.OrderDate = orderDate;
                         validDate = true;
                     }
-                    else
-                    {
-                        Console.WriteLine("OK. We will enter a new order date. Press ENTER to continue.");
-                        Console.ReadLine();
-                    }
                 }
 
-                //failing DateTime TryParse
                 else
                 {
                     _errorResponse.ErrorTime = DateTime.Now;
@@ -75,7 +75,10 @@ namespace FlooringApp.UI.WorkFlows
                     _errorResponse.Message = "Invalid date time";
                     _errorResponse.Input = dateInput;
                     _oops.SubmitErrorToLog(_errorResponse);
-                    Console.WriteLine("That is not a valid date. Press ENTER to continue.");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("That is not a valid date.");
+                    Console.WriteLine("Press ENTER to continue...");
+                    Console.ResetColor();
                     Console.ReadLine();
                 }
 
@@ -89,36 +92,36 @@ namespace FlooringApp.UI.WorkFlows
             do
             {
                 Console.Clear();
-                Console.Write("What is your order number? ");
+                Console.Write("What is your Order Number? ");
                 string orderNumberInput = Console.ReadLine();
+                Console.WriteLine();
+
                 int orderNumber;
 
-                if (int.TryParse(orderNumberInput, out orderNumber))
+                if (orderNumberInput == "")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("You must enter an Order Number");
+                    Console.WriteLine("Press ENTER to continue...");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                }
+
+                else if (int.TryParse(orderNumberInput, out orderNumber))
                 {
                     string input = "";
                     do
                     {
                         Console.Write("Is {0} the correct order number? (Y)es or (N)o: ", orderNumber);
                         input = Console.ReadLine().ToUpper();
-                        if (input != "Y" && input != "N")
-                        {
-                            Console.WriteLine("That is not a valid input. Press ENTER to continue.");
-                            Console.ReadLine();
-                        }
 
-                        else if (input == "Y")
-                        {
-                            _orderToRemove.OrderNumber = orderNumber;
-                            validOrderNumber = true;
-                            
-                        }
-                        else
-                        {
-                            Console.WriteLine("OK. We will enter a new order number. Press ENTER to continue.");
-                            Console.ReadLine();
-                            
-                        }
                     } while (input != "Y" && input != "N");
+
+                    if (input == "Y")
+                    {
+                        _orderToRemove.OrderNumber = orderNumber;
+                        validOrderNumber = true;
+                    }
                 }
 
                 else
@@ -128,16 +131,22 @@ namespace FlooringApp.UI.WorkFlows
                     _errorResponse.Message = "Invalid order number";
                     _errorResponse.Input = orderNumberInput;
                     _oops.SubmitErrorToLog(_errorResponse);
-                    Console.WriteLine("That is not a valid order number. Press ENTER to continue.");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("That is not a valid order number.");
+                    Console.WriteLine("Press ENTER to continue...");
+                    Console.ResetColor();
                     Console.ReadLine();
                 }
 
             } while (!validOrderNumber);
+
         }
 
         public void FetchOrderInfoToRemove()
         {
             var response = _oops.GetOrderInfo(_orderToRemove);
+
+            Console.Clear();
 
             if (response.Success)
             {
@@ -155,16 +164,14 @@ namespace FlooringApp.UI.WorkFlows
                 _orderToRemove.Total = response.Order.Total;
 
                 DisplayOrderInfoToRemove();
-                
-                Console.WriteLine();
-                //prompt user if they want to remove
-                PromptUserToConfirmRemoval();
             }
+
             else
             {
-                Console.WriteLine("Error Occurred!!!");
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(response.Message);
-                Console.WriteLine("Press ENTER to continue.");
+                Console.WriteLine("Press ENTER to continue...");
+                Console.ResetColor();
                 Console.ReadLine();
             }
         }
@@ -172,63 +179,47 @@ namespace FlooringApp.UI.WorkFlows
         public void DisplayOrderInfoToRemove()
         {
             Console.WriteLine();
-            Console.WriteLine("Order Number: {0}", _orderToRemove.OrderNumber);
-            Console.WriteLine("Order Date: {0:d}", _orderToRemove.OrderDate);
-            Console.WriteLine("Customer Name: {0}", _orderToRemove.CustomerName);
-            Console.WriteLine("State: {0}", _orderToRemove.State);
-            Console.WriteLine("Tax Rate: {0}%", _orderToRemove.TaxRate);
-            Console.WriteLine("Product Type: {0}", _orderToRemove.ProductType);
-            Console.WriteLine("Area: {0}", _orderToRemove.Area);
-            Console.WriteLine("Cost Per Square Foot: {0:C}", _orderToRemove.CostPerSquareFoot);
-            Console.WriteLine("Labor Cost Per Square Foot: {0:C}", _orderToRemove.LaborCostPerSquareFoot);
-            Console.WriteLine("Material Cost: {0:C}", _orderToRemove.MaterialCost);
-            Console.WriteLine("Labor Cost: {0:C}", _orderToRemove.LaborCost);
-            Console.WriteLine("Tax: {0:C}", _orderToRemove.Tax);
-            Console.WriteLine("Total: {0:C}", _orderToRemove.Total);
+            Console.WriteLine("Order Number: --------- {0}", _orderToRemove.OrderNumber);
+            Console.WriteLine("Order Date: ----------- {0:d}", _orderToRemove.OrderDate);
+            Console.WriteLine("Customer Name: -------- {0}", _orderToRemove.CustomerName);
+            Console.WriteLine("State: ---------------- {0}", _orderToRemove.State);
+            Console.WriteLine("Tax Rate: ------------- {0}%", _orderToRemove.TaxRate);
+            Console.WriteLine("Product Type: --------- {0}", _orderToRemove.ProductType);
+            Console.WriteLine("Area: ----------------- {0:N}", _orderToRemove.Area);
+            Console.WriteLine("Materials Rate: ------- {0:C}/sqft", _orderToRemove.CostPerSquareFoot);
+            Console.WriteLine("Labor Rate: ------------{0:C}/sqft", _orderToRemove.LaborCostPerSquareFoot);
+            Console.WriteLine("Materials Cost: ------- {0:C}", _orderToRemove.MaterialCost);
+            Console.WriteLine("Labor Cost: ----------- {0:C}", _orderToRemove.LaborCost);
+            Console.WriteLine("Tax: ------------------ {0:C}", _orderToRemove.Tax);
+            Console.WriteLine("Total: ---------------- {0:C}", _orderToRemove.Total);
             Console.WriteLine();
+            Console.WriteLine();
+
+            PromptUserToConfirmRemoval();
         }
 
         public void PromptUserToConfirmRemoval()
         {
-            bool confirmRemoval = false;
-            string input = "";
-
-            Console.WriteLine();
+            string input;
+            
             do
             {
-                do
-                {
-                    Console.Write("Do you want to remove this order? (Y)es or (N)o: ");
-                    input = Console.ReadLine().ToUpper();
+                Console.Write("Do you want to remove this order? (Y)es or (N)o: ");
+                input = Console.ReadLine().ToUpper();
 
-                    if (input != "Y" && input != "N")
-                    {
-                        Console.WriteLine("Invalid input. Press ENTER to continue.");
-                        Console.ReadLine();
-                    }
-                    else if (input == "Y")
-                    {
-                        //Send to BLL for removal
-                        var response = _oops.SubmitRemoveOrderToRepo(_orderToRemove);
-                        Console.WriteLine();
-                        Console.WriteLine(response.Message);
-                        Console.WriteLine("Press ENTER to continue.");
-                        Console.ReadLine();
+            } while (input != "Y" && input != "N");
 
-                        confirmRemoval = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("OK. We will not remove the order and then we will return to the Main Menu. Press ENTER to continue.");
-                        Console.ReadLine();
-                        confirmRemoval = true;
-                    }
-
-
-                } while (input != "Y" && input != "N");
-
-            } while (!confirmRemoval);
+            if (input == "Y")
+            {
+                //Send to BLL for removal
+                var response = _oops.SubmitRemoveOrderToRepo(_orderToRemove);
+                Console.WriteLine();
+                Console.WriteLine(response.Message);
+                Console.WriteLine("Press ENTER to continue...");
+                Console.ReadLine();
+            }
         }
 
     }
 }
+   

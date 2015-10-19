@@ -9,7 +9,7 @@ namespace FlooringApp.UI.WorkFlows
 {
     public class MainMenu
     {
-        public OrderOperations _oops;
+        private OrderOperations _oops;
 
         public MainMenu(OrderOperations oops)
         {
@@ -64,9 +64,20 @@ namespace FlooringApp.UI.WorkFlows
                     RemoveOrderWorkFlow rowf = new RemoveOrderWorkFlow(_oops);
                     rowf.Execute();
                     break;
+                case "":
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine();
+                    Console.WriteLine("You must enter an option.");
+                    Console.WriteLine("Press ENTER to continue...");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    break;
                 default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine();
                     Console.WriteLine("{0} is an invalid entry!", choice);
                     Console.WriteLine("Press enter to continue...");
+                    Console.ResetColor();
                     Console.ReadLine();
                     break;
             }

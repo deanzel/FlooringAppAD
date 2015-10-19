@@ -1,26 +1,26 @@
 Main Menu:
--Get rid of space between Quit and Enter Choice
+-Get rid of space between Quit and Enter Choice <done>
 
 Display Orders:-
 -Order date entry:
-  -For invalid order date, add space 
+  -For invalid order date, add space <done>
 -Display orders:
-  -Add press ENTER to continue.
-  -Add sqft unit label to Area
-  -Cost per sqft
-  -Add break line between Tax and Total
+  -Add press ENTER to continue. <done>
+  -Add sqft unit label to Area <done>
+  -Cost per sqft <done>
+  -Add break line between Tax and Total <omit>
 Add an Order:
 -Name entry:
-  -Add space before confirmation prompt
+  -Add space before confirmation prompt <done>
 -State entry:
-  -"List of States that we service:"
-  -For invalid state entry, add space before error message
-  -Add space after confirmation
+  -"List of States that we service:" <done>
+  -For invalid state entry, add space before error message <done>
+  -Add space after confirmation <done>
 -Product entry:
   -Add break line between products list and product entry prompt
-  -"Here is a list of our products"
-  -For empty entry, clear screen and display everything again
-  -Add spacing for invalid entries message
+  -"Here is a list of our products" <done>
+  -For empty entry, clear screen and display everything again <done>
+  -Add spacing for invalid entries message <done>
 -Area entry:
   -Display cost rates again
   -Add spaces for error messages
@@ -47,3 +47,11 @@ Remove an Order:
   -clear screen adn display everything for no not putting in Y or N
   -Add break line and right justify order display
   -add sqft to area
+
+
+
+add order area confirmation add commas to sqft
+yes or nno press enter resets, fix that
+if enter "yes", major glitch. says 0 sqft
+
+add order....chose product type...if press nothing...say that you need to enter something

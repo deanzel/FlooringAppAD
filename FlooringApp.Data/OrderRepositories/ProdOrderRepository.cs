@@ -211,7 +211,7 @@ namespace FlooringApp.Data.OrderRepositories
 
             var response = new Response();
             response.Success = true;
-            response.Message = "The order was successfully removed :-)";
+            response.Message = "The order was successfully removed.";
 
             return response;
         }
@@ -252,7 +252,7 @@ namespace FlooringApp.Data.OrderRepositories
             }
 
             response.Success = true;
-            response.Message = "The order was successfully edited!!";
+            response.Message = "Your request has been proceessed.";
 
             return response;
         }
