@@ -12,80 +12,38 @@ namespace FlooringApp.Data.OrderRepositories
 {
     public class MockOrderRepository : IOrderRepository
     {
+        private static Dictionary<string, List<Order>> _ordersDictionary = new Dictionary<string, List<Order>>();
+
         private DateTime _currentTime;
         private string _errorLogPath;
 
         public MockOrderRepository(string initialBuild)
         {
-            if (initialBuild.ToUpper() == "Y")
+            //Build initial set of order numbers
+            string filePath = @"DataFiles\Mock\";
+            string filePathHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
+
+            //Creates Mock folder if not there
+            string filePathMockFolder = @"DataFiles\Mock";
+            if (!Directory.Exists(filePathMockFolder))
             {
-                //Build initial set of order numbers
-                string filePath = @"DataFiles\Mock\";
-                string filePathHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
-
-                //Creates Mock folder if not there
-                string filePathMockFolder = @"DataFiles\Mock";
-                if (!Directory.Exists(filePathMockFolder))
-                {
-                    Directory.CreateDirectory(filePathMockFolder);
-                }
-
-
-                string[] orderNames = Directory.GetFiles(filePath, "Orders_*.txt");
-
-                List<int> orderNumbersHistory = new List<int>();
-
-                foreach (var orderPath in orderNames)
-                {
-                    var reader = File.ReadAllLines(orderPath);
-
-                    for (int i = 1; i < reader.Length; i++)
-                    {
-                        var columns = reader[i].Split(',');
-                        orderNumbersHistory.Add(int.Parse(columns[0]));
-                    }
-                }
-
-                using (var writer = File.CreateText(filePathHistory))
-                {
-                    foreach (int i in orderNumbersHistory)
-                    {
-                        writer.WriteLine(i);
-                    }
-                }
+                Directory.CreateDirectory(filePathMockFolder);
             }
 
-            //Creating Error Log file and folder (if folder is not there)
-            string filePathErrorLogFolder = @"DataFiles\Mock\ErrorLogs";
-            if (!Directory.Exists(filePathErrorLogFolder))
+            string[] orderNames = Directory.GetFiles(filePath, "Orders_*.txt");
+
+            List<int> orderNumbersHistory = new List<int>();
+
+            //Write each order date's orders to its own dictionary key
+            foreach (var orderPath in orderNames)
             {
-                Directory.CreateDirectory(filePathErrorLogFolder);
-            }
+                //Sample string path = DataFiles\Mock\Orders_06012015.txt
 
-            _currentTime = DateTime.Now;
-            string filePathErrorLog = @"DataFiles\Mock\ErrorLogs\ErrorLog_" + _currentTime.ToString("MMddyyyyhhmmss") +
-                                      ".txt";
+                List<Order> currentOrdersList = new List<Order>();
 
-            _errorLogPath = filePathErrorLog;
+                string orderDictionaryKey = orderPath.Substring(22, 8);
 
-            using (var writer = File.CreateText(_errorLogPath))
-            {
-                writer.WriteLine("This is the error log for the session starting at {0:G}.", _currentTime);
-                writer.WriteLine();
-                writer.WriteLine("--------------------------------------------------------------------------------");
-                writer.WriteLine();
-            }
-        }
-
-        public List<Order> GetOrdersFromDate(DateTime OrderDate)
-        {
-            string filePath = @"DataFiles\Mock\Orders_";
-            filePath += OrderDate.ToString("MMddyyyy") + ".txt";
-
-            List<Order> orders = new List<Order>();
-            if (File.Exists(filePath))
-            {
-                var reader = File.ReadAllLines(filePath);
+                var reader = File.ReadAllLines(orderPath);
 
                 for (int i = 1; i < reader.Length; i++)
                 {
@@ -119,11 +77,58 @@ namespace FlooringApp.Data.OrderRepositories
                     order.Tax = decimal.Parse(columns[L - 2]);
                     order.Total = decimal.Parse(columns[L - 1]);
 
-                    orders.Add(order);
+                    currentOrdersList.Add(order);
                 }
 
+                _ordersDictionary.Add(orderDictionaryKey, currentOrdersList);
+
+                for (int i = 1; i < reader.Length; i++)
+                {
+                    var columns = reader[i].Split(',');
+                    orderNumbersHistory.Add(int.Parse(columns[0]));
+                }
             }
-            return orders;
+
+            using (var writer = File.CreateText(filePathHistory))
+            {
+                foreach (int i in orderNumbersHistory)
+                {
+                    writer.WriteLine(i);
+                }
+            }
+
+
+            //Creating Error Log file and folder (if folder is not there)
+            string filePathErrorLogFolder = @"DataFiles\Mock\ErrorLogs";
+            if (!Directory.Exists(filePathErrorLogFolder))
+            {
+                Directory.CreateDirectory(filePathErrorLogFolder);
+            }
+
+            _currentTime = DateTime.Now;
+            string filePathErrorLog = @"DataFiles\Mock\ErrorLogs\ErrorLog_" + _currentTime.ToString("MMddyyyyhhmmss") +
+                                      ".txt";
+
+            _errorLogPath = filePathErrorLog;
+
+            using (var writer = File.CreateText(_errorLogPath))
+            {
+                writer.WriteLine("This is the error log for the session starting at {0:G}.", _currentTime);
+                writer.WriteLine();
+                writer.WriteLine("--------------------------------------------------------------------------------");
+                writer.WriteLine();
+            }
+        }
+
+        public List<Order> GetOrdersFromDate(DateTime OrderDate)
+        {
+        string dictionaryKeyDate = OrderDate.ToString("MMddyyyy");
+        List<Order> orders = new List<Order>();
+
+        _ordersDictionary.TryGetValue(dictionaryKeyDate, out orders);
+            
+        return orders;
+            
         }
 
         public Order GetOrder(Order OrderInfo)
@@ -140,70 +145,40 @@ namespace FlooringApp.Data.OrderRepositories
 
         public Order WriteNewOrderToRepo(Order NewOrder)
         {
-            string filePath = @"DataFiles\Mock\Orders_";
-            filePath += NewOrder.OrderDate.ToString("MMddyyyy") + ".txt";
+            string dictionaryKeyDate = NewOrder.OrderDate.ToString("MMddyyyy");
+            List<Order> orders = new List<Order>();
+            List<Order> ordersTemp = new List<Order>();
 
-            //determine new order number
+            _ordersDictionary.TryGetValue(dictionaryKeyDate, out ordersTemp);
+
             string filePathOrderHistory = @"DataFiles\Mock\OrderNumbersHistory.txt";
             var reader = File.ReadAllLines(filePathOrderHistory);
             int[] readerInts = Array.ConvertAll(reader, int.Parse);
 
             NewOrder.OrderNumber = readerInts.Max() + 1;
-
-            //if (File.Exists(filePath))
-            //{
-            //    using (var writer = File.AppendText(filePath))
-            //    {
-            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
-            //            NewOrder.CustomerName,
-            //            NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
-            //            NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
-            //            NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
-            //    }
-            //}
-            //else
-            //{
-            //    using (var writer = File.CreateText(filePath))
-            //    {
-            //        writer.WriteLine(
-            //            "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
-            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", NewOrder.OrderNumber,
-            //            NewOrder.CustomerName,
-            //            NewOrder.State, NewOrder.TaxRate, NewOrder.ProductType, NewOrder.Area,
-            //            NewOrder.CostPerSquareFoot, NewOrder.LaborCostPerSquareFoot,
-            //            NewOrder.MaterialCost, NewOrder.LaborCost, NewOrder.Tax, NewOrder.Total);
-            //    }
-            //}
-            //using (var writer = File.AppendText(filePathOrderHistory))
-            //{
-            //    writer.WriteLine(NewOrder.OrderNumber);
-            //}
-
+            if (ordersTemp == null)
+            {
+                orders.Add(NewOrder);
+                _ordersDictionary.Add(dictionaryKeyDate, orders);
+            }
+            else
+            {
+                ordersTemp.Add(NewOrder);
+                _ordersDictionary.Add(dictionaryKeyDate, ordersTemp);
+            }
+            
             return NewOrder;
         }
 
         public Response RemoveOrderFromRepo(Order OrderToRemove)
         {
-            string filePath = @"DataFiles\Mock\Orders_";
-            filePath += OrderToRemove.OrderDate.ToString("MMddyyyy") + ".txt";
+            string dictionaryKeyDate = OrderToRemove.OrderDate.ToString("MMddyyyy");
 
-            var ordersList = GetOrdersFromDate(OrderToRemove.OrderDate);
+            List<Order> ordersComplete = new List<Order>();
 
-            var newOrdersList = ordersList.Where(o => o.OrderNumber != OrderToRemove.OrderNumber);
+            _ordersDictionary.TryGetValue(dictionaryKeyDate, out ordersComplete);
 
-            //using (var writer = File.CreateText(filePath))
-            //{
-            //    writer.WriteLine(
-            //        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
-
-            //    foreach (var order in newOrdersList)
-            //    {
-            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", order.OrderNumber,
-            //            order.CustomerName, order.State, order.TaxRate, order.ProductType, order.Area,
-            //            order.CostPerSquareFoot, order.LaborCostPerSquareFoot, order.MaterialCost, order.LaborCost,
-            //            order.Tax, order.Total);
-            //    }
-            //}
+            ordersComplete.RemoveAll(o => o.OrderNumber == OrderToRemove.OrderNumber);
 
             var response = new Response();
             response.Success = true;
@@ -214,39 +189,18 @@ namespace FlooringApp.Data.OrderRepositories
 
         public Response EditOrderToRepo(Order OrderWithEdits)
         {
-            string filePath = @"DataFiles\Mock\Orders_";
-            filePath += OrderWithEdits.OrderDate.ToString("MMddyyyy") + ".txt";
+            string dictionaryKeyDate = OrderWithEdits.OrderDate.ToString("MMddyyyy");
 
-            var ordersList = GetOrdersFromDate(OrderWithEdits.OrderDate);
+            List<Order> ordersComplete = new List<Order>();
 
-            //find index of order to edit in ordersList
-            int index = ordersList.IndexOf(OrderWithEdits);
-            //returns index. Index is -1 (negative 1) if cannot find match
+            _ordersDictionary.TryGetValue(dictionaryKeyDate, out ordersComplete);
+
+            ordersComplete.RemoveAll(o => o.OrderNumber == OrderWithEdits.OrderNumber);
+
+            ordersComplete.Add(OrderWithEdits);
 
             var response = new Response();
-            if (index == -1)
-            {
 
-                response.Success = false;
-                response.Message = "Failed to find order in system. Internal glitch. Report to admin";
-                return response;
-            }
-
-            //use index number to make direct reference type modification
-            ordersList[index] = OrderWithEdits;
-
-            //using (var writer = File.CreateText(filePath))
-            //{
-            //    writer.WriteLine(
-            //        "OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total");
-
-            //    foreach (var o in ordersList)
-            //    {
-            //        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11}", o.OrderNumber,
-            //            o.CustomerName, o.State, o.TaxRate, o.ProductType, o.Area,
-            //            o.CostPerSquareFoot, o.LaborCostPerSquareFoot, o.MaterialCost, o.LaborCost, o.Tax, o.Total);
-            //    }
-            //}
             response.Success = true;
             response.Message = "The order was successfully edited!!";
 
