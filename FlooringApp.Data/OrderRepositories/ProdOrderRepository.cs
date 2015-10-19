@@ -132,11 +132,20 @@ namespace FlooringApp.Data.OrderRepositories
             List<Order> orders = GetOrdersFromDate(OrderInfo.OrderDate);
 
             Order updatedOrderInfo = new Order();
-            updatedOrderInfo = orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
 
-            OrderInfo = updatedOrderInfo;
+            if (orders != null)
+            {
+                updatedOrderInfo = orders.FirstOrDefault(o => o.OrderNumber == OrderInfo.OrderNumber);
 
-            return OrderInfo;
+                OrderInfo = updatedOrderInfo;
+
+                return OrderInfo;
+            }
+
+            else
+            {
+                return updatedOrderInfo;
+            }
         }
 
         public Order WriteNewOrderToRepo(Order NewOrder)
