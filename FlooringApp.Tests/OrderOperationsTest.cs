@@ -117,11 +117,42 @@ namespace FlooringApp.Tests
             Assert.AreEqual(returnedOrderInfo.Order.ProductType, "Wood");
         }
 
-        //Testing SubmitRemoveOrderToRepo
+        //Testing SubmitRemoveOrderToRepo()
         [Test]
         public void SubmitRemoveOrderToRepoTest()
         {
-            
+            Order orderToRemove = new Order() {OrderNumber = 1, OrderDate = DateTime.Parse("06/01/2013")};
+
+            var response = _oops.SubmitRemoveOrderToRepo(orderToRemove);
+
+            Assert.AreEqual(response.Success, true);
+            Assert.AreEqual(response.Message, "The order was successfully removed!!");
+        }
+
+        //Testing SubmitEditOrderToRepo()
+        [Test]
+        public void SubmitEditOrderToRepoTest()
+        {
+            Order orderToRemove = new Order() { OrderNumber = 1, OrderDate = DateTime.Parse("06/01/2013"), CustomerName = "Dean Choi", Total = 100.00M};
+
+            var response = _oops.SubmitEditOrderToRepo(orderToRemove);
+
+            Assert.AreEqual(response.Success, true);
+            Assert.AreEqual(response.Message, "The order was successfully edited!!");
+        }
+
+        //Testing SubmitErrorToLog()
+        //Can't really test to see if written to file but it writes :)
+        [Test]
+        public void SubmitErrorToLogTest()
+        {
+            ErrorResponse error = new ErrorResponse()
+            {
+                ErrorTime = DateTime.Parse("10/18/2015"), ErrorSourceMethod = "Add Order Method",
+                Message = "State Input Error", Input = "pizza!!!!!"
+            };
+
+            _oops.SubmitErrorToLog(error);
         }
 
     }
