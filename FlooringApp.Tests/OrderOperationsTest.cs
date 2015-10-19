@@ -91,5 +91,38 @@ namespace FlooringApp.Tests
 
             Assert.AreEqual(expected, result);
         }
+
+
+        //Testing SubmitOrderToRepo()
+        [Test]
+        public void SubmitOrderToRepoTest()
+        {
+            Order inputOrder = new Order() {OrderNumber = 15, CustomerName = "Dean Choi", State = "OH"};
+
+            Order returnedOrder = _oops.SubmitOrderToRepo(inputOrder);
+
+            Assert.AreEqual(inputOrder.OrderNumber, returnedOrder.OrderNumber);
+        }
+
+        //Testing GetOrderInfo()
+        [Test]
+        public void GetOrderInfoTest()
+        {
+            Order orderInput = new Order() {OrderNumber = 1, OrderDate = DateTime.Parse("06/01/2013")};
+
+            var returnedOrderInfo = _oops.GetOrderInfo(orderInput);
+
+            Assert.AreEqual(returnedOrderInfo.Order.CustomerName, "Wise");
+            Assert.AreEqual(returnedOrderInfo.Order.State, "OH");
+            Assert.AreEqual(returnedOrderInfo.Order.ProductType, "Wood");
+        }
+
+        //Testing SubmitRemoveOrderToRepo
+        [Test]
+        public void SubmitRemoveOrderToRepoTest()
+        {
+            
+        }
+
     }
 }
